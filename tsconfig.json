@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng-wizard": [
+        "dist/ng-wizard"
+      ],
+      "ng-wizard/*": [
+        "dist/ng-wizard/*"
+      ]
+    }
   }
 }
