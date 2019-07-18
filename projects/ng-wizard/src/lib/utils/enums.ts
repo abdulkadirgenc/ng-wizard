@@ -10,11 +10,11 @@ export enum TOOLBAR_BUTTON_POSITION {
     end = 'end'
 }
 
-export enum TRANSITION_EFFECT {
-    none = 'none',
-    slide = 'slide',
-    fade = 'fade'
-}
+// export enum TRANSITION_EFFECT {
+//     none = 'none',
+//     slide = 'slide',
+//     fade = 'fade'
+// }
 
 export enum THEME {
     default = 'default',

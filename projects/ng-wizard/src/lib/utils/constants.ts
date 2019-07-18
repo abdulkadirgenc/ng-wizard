@@ -1,5 +1,5 @@
 import { NgWizardConfig } from './interfaces';
-import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION, TRANSITION_EFFECT, THEME } from './enums';
+import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION/*, TRANSITION_EFFECT*/, THEME } from './enums';
 
 export const DEFAULT_CONFIG: NgWizardConfig = {
     selected: 0,
@@ -35,6 +35,6 @@ export const DEFAULT_CONFIG: NgWizardConfig = {
     errorSteps: [],
     hiddenSteps: [],
     theme: THEME.default,
-    transitionEffect: TRANSITION_EFFECT.none,
-    transitionSpeed: '400'
+    // transitionEffect: TRANSITION_EFFECT.none,
+    // transitionSpeed: '400'
 };

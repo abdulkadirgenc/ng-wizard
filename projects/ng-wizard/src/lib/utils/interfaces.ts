@@ -1,4 +1,4 @@
-import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION, TRANSITION_EFFECT, THEME } from './enums';
+import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME } from './enums';
 
 export interface Language {
     next?: string;
@@ -49,14 +49,16 @@ export interface NgWizardConfig {
     errorSteps?: number[]; // Highlight step with errors
     hiddenSteps?: number[]; // Hidden steps
     theme?: THEME; // theme for the wizard, related css need to include for other than default theme
-    transitionEffect?: TRANSITION_EFFECT; // Effect on navigation, none/slide/fade
-    transitionSpeed?: string;
+    //transitionEffect?: TRANSITION_EFFECT; // Effect on navigation, none/slide/fade
+    //transitionSpeed?: string;
+    //transitionEasing?: string;
 }
 
 export interface NgWizardStep {
     title: string;
     description: string;
-    content: string;
+    content?: string;
+    contentURL?: string
 }
 
 export interface NgWizardStepState {
@@ -66,4 +68,5 @@ export interface NgWizardStepState {
     errorStep: boolean;
     hiddenStep: boolean;
     done: boolean;
+    active: boolean;
 }

@@ -1,8 +1,8 @@
 <div>
     <div id="ngwizard" [ngClass]="mainClass">
         <ul [ngClass]="navClass">
-            <li *ngFor="let stepState of stepStates; let i = index" [ngClass]="getStepCssClass(stepState, i)">
-                <a href="#step-{{ i }}" (click)="stepClicked($event, stepState, i)"
+            <li *ngFor="let stepState of stepStates; let i = index" [ngClass]="_getStepCssClass(stepState)">
+                <a href="#step-{{ i }}" (click)="_showSelectedStep($event, stepState)"
                     [ngClass]="linkClass">{{ stepState.step.title }}<br /><small>{{ stepState.step.description }}</small></a>
             </li>
         </ul>
@@ -10,10 +10,10 @@
 
     <div *ngIf="showToolbarTop" [ngClass]="toolbarTopClass">
         <div class="btn-group mr-2 sw-btn-group" role="group">
-            <button class="btn btn-secondary sw-btn-prev" type="button"
-                (click)="_showPrevious($event)">{{ defaultConfig.lang.previous }}</button>
-            <button class="btn btn-secondary sw-btn-next" type="button"
-                (click)="_showNext($event)">{{ defaultConfig.lang.next }}</button>
+            <button [ngClass]="previousButtonClass" type="button"
+                (click)="_showPreviousStep($event)">{{ defaultConfig.lang.previous }}</button>
+            <button [ngClass]="nextButtonClass" type="button"
+                (click)="_showNextStep($event)">{{ defaultConfig.lang.next }}</button>
         </div>
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
@@ -31,10 +31,10 @@
 
     <div *ngIf="showToolbarBottom" [ngClass]="toolbarBottomClass">
         <div class="btn-group mr-2 sw-btn-group" role="group">
-            <button class="btn btn-secondary sw-btn-prev" type="button"
-                (click)="_showPrevious($event)">{{ defaultConfig.lang.previous }}</button>
-            <button class="btn btn-secondary sw-btn-next" type="button"
-                (click)="_showNext($event)">{{ defaultConfig.lang.next }}</button>
+            <button [ngClass]="previousButtonClass" type="button"
+                (click)="_showPreviousStep($event)">{{ defaultConfig.lang.previous }}</button>
+            <button [ngClass]="nextButtonClass" type="button"
+                (click)="_showNextStep($event)">{{ defaultConfig.lang.next }}</button>
         </div>
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
