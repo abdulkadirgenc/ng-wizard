@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
 import { NgWizardConfig, NgWizardStep, NgWizardStepState } from '../utils/interfaces';
-import { TOOLBAR_POSITION } from '../utils/enums';
+import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS } from '../utils/enums';
 
 @Component({
   selector: 'ng-wizard',
@@ -59,9 +59,6 @@ export class NgWizardComponent implements OnInit {
     this.stepStates = this.steps.map((step, index) => <NgWizardStepState>{
       step: step,
       index: index,
-      disabledStep: this.config.disabledSteps.includes(index),
-      errorStep: this.config.errorSteps.includes(index),
-      hiddenStep: this.config.hiddenSteps.includes(index)
     });
 
     // Mark previous steps of the active step as done
@@ -70,8 +67,8 @@ export class NgWizardComponent implements OnInit {
       && this.config.anchorSettings.markAllPreviousStepsAsDone) {
 
       this.stepStates.forEach(stepState => {
-        if (!stepState.disabledStep && !stepState.hiddenStep) {
-          stepState.done = stepState.index < this.config.selected
+        if (stepState.step.state != STEP_STATE.disabled && stepState.step.state != STEP_STATE.hidden) {
+          stepState.step.status = stepState.index < this.config.selected ? STEP_STATUS.done : stepState.step.status;
         }
       });
     }
@@ -110,24 +107,25 @@ export class NgWizardComponent implements OnInit {
   _getStepCssClass(selectedStepState: NgWizardStepState) {
     var stepClass = this.styles.step;
 
-    if (selectedStepState.disabledStep) {
-      stepClass += ' disabled';
+    switch (selectedStepState.step.state) {
+      case STEP_STATE.disabled:
+        stepClass += ' disabled';
+        break;
+      case STEP_STATE.error:
+        stepClass += ' danger';
+        break;
+      case STEP_STATE.hidden:
+        stepClass += ' hidden';
+        break;
     }
 
-    if (selectedStepState.errorStep) {
-      stepClass += ' danger';
-    }
-
-    if (selectedStepState.hiddenStep) {
-      stepClass += ' hidden';
-    }
-
-    if (selectedStepState.done) {
-      stepClass += ' done';
-    }
-
-    if (selectedStepState.active) {
-      stepClass += ' active';
+    switch (selectedStepState.step.status) {
+      case STEP_STATUS.done:
+        stepClass += ' done';
+        break;
+      case STEP_STATUS.active:
+        stepClass += ' active';
+        break;
     }
 
     return stepClass;
@@ -189,7 +187,7 @@ export class NgWizardComponent implements OnInit {
       return;
     }
 
-    if (this.config.anchorSettings.enableAnchorOnDoneStep == false && selectedStepState.done) {
+    if (this.config.anchorSettings.enableAnchorOnDoneStep == false && selectedStepState.step.status == STEP_STATUS.done) {
       return true;
     }
 
@@ -198,7 +196,7 @@ export class NgWizardComponent implements OnInit {
         this._showStep(selectedStepState.index);
       }
       else {
-        if (selectedStepState.done) {
+        if (selectedStepState.step.status == STEP_STATUS.done) {
           this._showStep(selectedStepState.index);
         }
       }
@@ -209,7 +207,9 @@ export class NgWizardComponent implements OnInit {
     event.preventDefault();
     // Find the next not disabled & hidden step
     var filteredStepStates = this.stepStates.filter((stepState, stepIndex) => {
-      return stepIndex > (this.current_index == null ? -1 : this.current_index) && !stepState.disabledStep && !stepState.hiddenStep;
+      return stepIndex > (this.current_index == null ? -1 : this.current_index)
+        && stepState.step.state != STEP_STATE.disabled
+        && stepState.step.state != STEP_STATE.hidden;
     });
 
     if (filteredStepStates.length == 0) {
@@ -228,7 +228,9 @@ export class NgWizardComponent implements OnInit {
     event.preventDefault();
     // Find the previous not disabled & hidden step
     var filteredStepStates = this.stepStates.filter((stepState, stepIndex) => {
-      return stepIndex < (this.current_index == null && this.config.cycleSteps ? this.stepStates.length : this.current_index) && !stepState.disabledStep && !stepState.hiddenStep;
+      return stepIndex < (this.current_index == null && this.config.cycleSteps ? this.stepStates.length : this.current_index)
+        && stepState.step.state != STEP_STATE.disabled
+        && stepState.step.state != STEP_STATE.hidden;
     });
 
     if (filteredStepStates.length == 0) {
@@ -253,8 +255,8 @@ export class NgWizardComponent implements OnInit {
       return;
     }
     var selectedStepState = this.stepStates[stepIndex];
-    // If it is a disabled step, skip
-    if (selectedStepState.disabledStep || selectedStepState.hiddenStep) {
+    // If it is a disabled or hidden step, skip
+    if (selectedStepState.step.state == STEP_STATE.disabled || selectedStepState.step.state == STEP_STATE.hidden) {
       return;
     }
 
@@ -264,10 +266,10 @@ export class NgWizardComponent implements OnInit {
 
   _loadStepContent(selectedStepState: NgWizardStepState) {
     // Get the direction of step navigation
-    var stepDirection = (this.current_index !== null && this.current_index !== selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
+    var stepDirection = (this.current_index != null && this.current_index != selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
 
     // Trigger "leaveStep" event
-    if (this.current_index !== null && this._triggerEvent("leaveStep", [this.currentStepState, this.current_index, stepDirection]) === false) {
+    if (this.current_index != null && this._triggerEvent("leaveStep", [this.currentStepState, this.current_index, stepDirection]) == false) {
       return;
     }
 
@@ -309,7 +311,7 @@ export class NgWizardComponent implements OnInit {
 
   _transitPage(selectedStepState: NgWizardStepState) {
     // Get the direction of step navigation
-    var stepDirection = (this.current_index !== null && this.current_index !== selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
+    var stepDirection = (this.current_index != null && this.current_index != selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
     var stepPosition = (selectedStepState.index == 0) ? 'first' : (selectedStepState.index == this.steps.length - 1 ? 'final' : 'middle');
 
     // TODO: Hide previous step content, show selected step content
@@ -333,15 +335,15 @@ export class NgWizardComponent implements OnInit {
   _setAnchor(selectedStepState: NgWizardStepState) {
     // Current step anchor > Remove other classes and add done class
     if (this.currentStepState) {
-      this.currentStepState.active = false;
+      this.currentStepState.step.status = STEP_STATUS.untouched;
 
-      if (this.config.anchorSettings.markDoneStep !== false) {
-        this.currentStepState.done = true;
+      if (this.config.anchorSettings.markDoneStep != false) {
+        this.currentStepState.step.status = STEP_STATUS.done;
 
         if (this.config.anchorSettings.removeDoneStepOnNavigateBack != false) {
           this.stepStates.forEach(stepState => {
             if (stepState.index > selectedStepState.index) {
-              stepState.done = false;
+              stepState.step.status = STEP_STATUS.untouched;
             }
           });
         }
@@ -349,8 +351,7 @@ export class NgWizardComponent implements OnInit {
     }
 
     // Next step anchor > Remove other classes and add active class
-    selectedStepState.done = false;
-    selectedStepState.active = true;
+    selectedStepState.step.status = STEP_STATUS.active;
   }
 
   _setButtons(stepIndex: number) {
@@ -413,7 +414,7 @@ export class NgWizardComponent implements OnInit {
   }
 
   _setURLHash(hash: string) {
-    if (this.config.showStepURLhash && window.location.hash !== hash) {
+    if (this.config.showStepURLhash && window.location.hash != hash) {
       window.location.hash = hash;
     }
   }
@@ -435,7 +436,7 @@ export class NgWizardComponent implements OnInit {
   // PUBLIC FUNCTIONS
   theme(v) {
     // TODO
-    // if (this.options.theme === v) {
+    // if (this.options.theme == v) {
     //   return false;
     // }
     // this.main.removeClass('ng-wizard-theme-' + this.options.theme);
@@ -456,7 +457,7 @@ export class NgWizardComponent implements OnInit {
   reset() {
     // TODO
     // // Trigger "beginReset" event
-    // if (this._triggerEvent("beginReset") === false) {
+    // if (this._triggerEvent("beginReset") == false) {
     //   return false;
     // }
 
@@ -481,7 +482,7 @@ export class NgWizardComponent implements OnInit {
     // var mi = this;
     // stepArray = $.isArray(stepArray) ? stepArray : [stepArray];
     // var selSteps = $.grep(this.steps, function (n, i) {
-    //   return $.inArray(i, stepArray) !== -1; //  && i !== mi.current_index
+    //   return $.inArray(i, stepArray) != -1; //  && i != mi.current_index
     // });
     // if (selSteps && selSteps.length > 0) {
     //   switch (state) {

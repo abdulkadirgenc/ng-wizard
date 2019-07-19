@@ -31,9 +31,6 @@ export const DEFAULT_CONFIG: NgWizardConfig = {
     contentURL: null,
     contentCache: true,
     ajaxSettings: {},
-    disabledSteps: [],
-    errorSteps: [],
-    hiddenSteps: [],
     theme: THEME.default,
     // transitionEffect: TRANSITION_EFFECT.none,
     // transitionSpeed: '400'

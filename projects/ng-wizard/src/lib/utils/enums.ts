@@ -22,3 +22,16 @@ export enum THEME {
     circles = 'circles',
     dots = 'dots'
 }
+
+export enum STEP_STATE {
+    normal = 'normal',
+    disabled = 'disabled',
+    error = 'error',
+    hidden = 'hidden'
+}
+
+export enum STEP_STATUS {
+    untouched = 'untouched',
+    done = 'done',
+    active = 'active'
+}

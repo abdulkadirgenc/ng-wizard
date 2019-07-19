@@ -1,4 +1,4 @@
-import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME } from './enums';
+import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS } from './enums';
 
 export interface Language {
     next?: string;
@@ -45,9 +45,6 @@ export interface NgWizardConfig {
     contentURL?: string; // content url, Enables Ajax content loading. Can also set as data data-content-url on anchor
     contentCache?: boolean; // cache step contents, if false content is fetched always from ajax url
     ajaxSettings?: AjaxSettings; // Ajax extra settings
-    disabledSteps?: number[]; // Array Steps disabled
-    errorSteps?: number[]; // Highlight step with errors
-    hiddenSteps?: number[]; // Hidden steps
     theme?: THEME; // theme for the wizard, related css need to include for other than default theme
     //transitionEffect?: TRANSITION_EFFECT; // Effect on navigation, none/slide/fade
     //transitionSpeed?: string;
@@ -58,15 +55,12 @@ export interface NgWizardStep {
     title: string;
     description: string;
     content?: string;
-    contentURL?: string
+    contentURL?: string;
+    state?: STEP_STATE;
+    status?: STEP_STATUS;
 }
 
 export interface NgWizardStepState {
     step: NgWizardStep;
     index: number;
-    disabledStep: boolean;
-    errorStep: boolean;
-    hiddenStep: boolean;
-    done: boolean;
-    active: boolean;
 }
