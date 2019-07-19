@@ -1,9 +1,9 @@
 <div>
     <div id="ngwizard" [ngClass]="styles.main">
         <ul class="nav nav-tabs step-anchor">
-            <li *ngFor="let stepState of stepStates; let i = index" [ngClass]="_getStepCssClass(stepState)">
-                <a href="#step-{{ i }}" (click)="_showSelectedStep($event, stepState)"
-                    class="nav-link">{{ stepState.step.title }}<br /><small>{{ stepState.step.description }}</small></a>
+            <li *ngFor="let step of steps; let i = index" [ngClass]="_getStepCssClass(step)">
+                <a href="#step-{{ i }}" (click)="_showSelectedStep($event, step)"
+                    class="nav-link">{{ step.definition.title }}<br /><small>{{ step.definition.description }}</small></a>
             </li>
         </ul>
     </div>
@@ -23,8 +23,8 @@
     </div>
 
     <div class="ng-wizard-container tab-content">
-        <div *ngIf="currentStepState" [ngClass]="styles.page" style="display: block">
-            {{ currentStepState.step.content }}
+        <div *ngIf="currentStep" [ngClass]="styles.page" style="display: block">
+            {{ currentStep.definition.content }}
         </div>
     </div>
 

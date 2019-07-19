@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgWizardStep, NgWizardConfig } from 'projects/ng-wizard/src/lib/utils/interfaces';
+import { NgWizardStepDef, NgWizardConfig } from 'projects/ng-wizard/src/lib/utils/interfaces';
 import { THEME, STEP_STATE } from 'projects/ng-wizard/src/lib/utils/enums';
 
 @Component({
@@ -10,7 +10,7 @@ import { THEME, STEP_STATE } from 'projects/ng-wizard/src/lib/utils/enums';
 export class AppComponent {
   title = 'ng-wizard-app';
 
-  steps: NgWizardStep[] = [
+  steps: NgWizardStepDef[] = [
     {
       title: 'Step 1 Title',
       description: 'Step 1 description',

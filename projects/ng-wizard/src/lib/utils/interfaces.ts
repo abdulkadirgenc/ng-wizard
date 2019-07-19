@@ -51,16 +51,16 @@ export interface NgWizardConfig {
     //transitionEasing?: string;
 }
 
-export interface NgWizardStep {
+export interface NgWizardStepDef {
     title: string;
     description: string;
     content?: string;
     contentURL?: string;
     state?: STEP_STATE;
-    status?: STEP_STATUS;
 }
 
-export interface NgWizardStepState {
-    step: NgWizardStep;
+export interface NgWizardStep {
+    definition: NgWizardStepDef;
     index: number;
+    status?: STEP_STATUS;
 }
