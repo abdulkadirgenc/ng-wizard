@@ -36,7 +36,7 @@ export interface NgWizardConfig {
     keyNavigation?: boolean; // Enable/Disable keyboard navigation(left and right keys are used if enabled)
     autoAdjustHeight?: boolean; // Automatically adjust content height
     cycleSteps?: boolean; // Allows to cycle the navigation of steps
-    backButtonSupport?: boolean; // Enable the back button support
+    //backButtonSupport?: boolean; // Enable the back button support
     //useURLhash?: boolean; // Enable selection of the step based on url hash
     showStepURLhash?: boolean; // Show url hash based on step
     lang?: Language; // Language variables for button

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
 import { NgWizardConfig, NgWizardStepDef, NgWizardStep } from '../utils/interfaces';
-import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS } from '../utils/enums';
+import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
 
 @Component({
   selector: 'ng-wizard',
@@ -43,6 +43,10 @@ export class NgWizardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._init();
+  }
+
+  _init() {
     this.config = this.ngService.getMergedWithDefaultConfig(this.config);
 
     // set step states
@@ -63,8 +67,15 @@ export class NgWizardComponent implements OnInit {
 
   _setSteps() {
     this.steps = this.stepDefinitions.map((step, index) => <NgWizardStep>{
-      definition: step,
+      definition: {
+        title: step.title,
+        description: step.description,
+        content: step.content,
+        contentURL: step.contentURL,
+        state: step.state || STEP_STATE.normal,
+      },
       index: index,
+      status: STEP_STATUS.untouched,
     });
 
     // Mark previous steps of the active step as done
@@ -129,22 +140,6 @@ export class NgWizardComponent implements OnInit {
       //   mi._keyNav(e);
       // });
     }
-
-    // Back/forward browser button event
-    if (this.config.backButtonSupport) {
-      // $(window).on('hashchange', function (e) {
-      //   if (!mi.options.useURLhash) {
-      //     return true;
-      //   }
-      //   if (window.location.hash) {
-      //     var elm = $("a[href*='" + window.location.hash + "']", mi.nav);
-      //     if (elm && elm.length > 0) {
-      //       e.preventDefault();
-      //       mi._showStep(mi.steps.index(elm));
-      //     }
-      //   }
-      // });
-    }
   }
 
   _getStepCssClass(selectedStep: NgWizardStep) {
@@ -207,8 +202,10 @@ export class NgWizardComponent implements OnInit {
     }
   }
 
-  _showNextStep(event: Event) {
-    event.preventDefault();
+  _showNextStep(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
     // Find the next not disabled & hidden step
     var filteredSteps = this.steps.filter(step => {
       return step.index > (this.current_index == null ? -1 : this.current_index)
@@ -228,8 +225,10 @@ export class NgWizardComponent implements OnInit {
     }
   }
 
-  _showPreviousStep(event: Event) {
-    event.preventDefault();
+  _showPreviousStep(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
     // Find the previous not disabled & hidden step
     var filteredSteps = this.steps.filter(step => {
       return step.index < (this.current_index == null && this.config.cycleSteps ? this.steps.length : this.current_index)
@@ -318,10 +317,6 @@ export class NgWizardComponent implements OnInit {
     var stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
     var stepPosition = (selectedStep.index == 0) ? 'first' : (selectedStep.index == this.steps.length - 1 ? 'final' : 'middle');
 
-    // TODO: Hide previous step content, show selected step content
-
-    // Change the url hash to new step
-    // this._setURLHash(selectedStep.href);
     // Update controls
     this._setAnchor(selectedStep);
     // Set the buttons based on the step
@@ -405,7 +400,7 @@ export class NgWizardComponent implements OnInit {
     }
   }
 
-  _triggerEvent(name: string, params: any[]): boolean {
+  _triggerEvent(name: string, params?: any[]): boolean {
     // TODO
     // // Trigger an event
     // var e = $.Event(name);
@@ -415,12 +410,6 @@ export class NgWizardComponent implements OnInit {
     // }
     // return e.result;
     return true;
-  }
-
-  _setURLHash(hash: string) {
-    if (this.config.showStepURLhash && window.location.hash != hash) {
-      window.location.hash = hash;
-    }
   }
 
   _loader(action: string) {
@@ -438,46 +427,37 @@ export class NgWizardComponent implements OnInit {
   }
 
   // PUBLIC FUNCTIONS
-  theme(v) {
-    // TODO
-    // if (this.options.theme == v) {
-    //   return false;
-    // }
-    // this.main.removeClass('ng-wizard-theme-' + this.options.theme);
-    // this.options.theme = v;
-    // this.main.addClass('ng-wizard-theme-' + this.options.theme);
-    // // Trigger "themeChanged" event
-    // this._triggerEvent("themeChanged", [this.options.theme]);
+  setTheme(theme: THEME) {
+    if (this.config.theme == theme) {
+      return false;
+    }
+
+    this.config.theme = theme;
+    this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
+
+    // Trigger "themeChanged" event
+    this._triggerEvent("themeChanged", [this.config.theme]);
   }
 
-  // next() {
-  //   this._showNext();
-  // }
+  next() {
+    this._showNextStep();
+  }
 
-  // prev() {
-  //   this._showPrevious();
-  // }
+  prev() {
+    this._showPreviousStep();
+  }
 
   reset() {
-    // TODO
-    // // Trigger "beginReset" event
-    // if (this._triggerEvent("beginReset") == false) {
-    //   return false;
-    // }
+    // Trigger "beginReset" event
+    if (this._triggerEvent("beginReset") == false) {
+      return;
+    }
 
-    // // Reset all elements and classes
-    // this.container.stop(true);
-    // this.pages.stop(true);
-    // this.pages.hide();
-    // this.current_index = null;
-    // this._setURLHash(this.steps.eq(this.options.selected).attr("href"));
-    // $(".ng-wizard-toolbar", this.main).remove();
-    // this.steps.removeClass();
-    // this.steps.parents('li').removeClass();
-    // this.steps.data('has-content', false);
-    // this.init();
+    // Reset all elements and classes
+    this.current_index = null;
+    this._init();
 
-    // // Trigger "endReset" event
-    // this._triggerEvent("endReset");
+    // Trigger "endReset" event
+    this._triggerEvent("endReset");
   }
 }

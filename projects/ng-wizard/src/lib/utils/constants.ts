@@ -6,7 +6,7 @@ export const DEFAULT_CONFIG: NgWizardConfig = {
     keyNavigation: true,
     autoAdjustHeight: true,
     cycleSteps: false,
-    backButtonSupport: true,
+    // backButtonSupport: true,
     //useURLhash: true,
     showStepURLhash: true,
     lang: {
