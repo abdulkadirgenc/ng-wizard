@@ -1,44 +1,43 @@
 <div>
-    <div id="ngwizard" [ngClass]="mainClass">
-        <ul [ngClass]="navClass">
+    <div id="ngwizard" [ngClass]="styles.main">
+        <ul [ngClass]="styles.nav">
             <li *ngFor="let stepState of stepStates; let i = index" [ngClass]="_getStepCssClass(stepState)">
                 <a href="#step-{{ i }}" (click)="_showSelectedStep($event, stepState)"
-                    [ngClass]="linkClass">{{ stepState.step.title }}<br /><small>{{ stepState.step.description }}</small></a>
+                    [ngClass]="styles.link">{{ stepState.step.title }}<br /><small>{{ stepState.step.description }}</small></a>
             </li>
         </ul>
     </div>
 
-    <div *ngIf="showToolbarTop" [ngClass]="toolbarTopClass">
+    <div *ngIf="showToolbarTop" [ngClass]="styles.toolbarTop">
         <div class="btn-group mr-2 sw-btn-group" role="group">
-            <button [ngClass]="previousButtonClass" type="button"
-                (click)="_showPreviousStep($event)">{{ defaultConfig.lang.previous }}</button>
-            <button [ngClass]="nextButtonClass" type="button"
-                (click)="_showNextStep($event)">{{ defaultConfig.lang.next }}</button>
+            <button [ngClass]="styles.previousButton" type="button"
+                (click)="_showPreviousStep($event)">{{ config.lang.previous }}</button>
+            <button [ngClass]="styles.nextButton" type="button"
+                (click)="_showNextStep($event)">{{ config.lang.next }}</button>
         </div>
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
-            <button *ngFor="let button of defaultConfig.toolbarSettings.toolbarExtraButtons; let j = index"
+            <button *ngFor="let button of config.toolbarSettings.toolbarExtraButtons; let j = index"
                 [ngClass]="button.class" type="button">{{ button.text }}</button>
         </div>
     </div>
 
-    <div [ngClass]="containerClass">
-        <div *ngFor="let stepState of stepStates; let i = index" id="step-{{ i }}" [ngClass]="pageClass"
-            style="display: block">
-            {{ stepState.step.content }}
+    <div [ngClass]="styles.container">
+        <div *ngIf="currentStepState" [ngClass]="styles.page" style="display: block">
+            {{ currentStepState.step.content }}
         </div>
     </div>
 
-    <div *ngIf="showToolbarBottom" [ngClass]="toolbarBottomClass">
+    <div *ngIf="showToolbarBottom" [ngClass]="styles.toolbarBottom">
         <div class="btn-group mr-2 sw-btn-group" role="group">
-            <button [ngClass]="previousButtonClass" type="button"
-                (click)="_showPreviousStep($event)">{{ defaultConfig.lang.previous }}</button>
-            <button [ngClass]="nextButtonClass" type="button"
-                (click)="_showNextStep($event)">{{ defaultConfig.lang.next }}</button>
+            <button [ngClass]="styles.previousButton" type="button"
+                (click)="_showPreviousStep($event)">{{ config.lang.previous }}</button>
+            <button [ngClass]="styles.nextButton" type="button"
+                (click)="_showNextStep($event)">{{ config.lang.next }}</button>
         </div>
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
-            <button *ngFor="let button of defaultConfig.toolbarSettings.toolbarExtraButtons; let j = index"
+            <button *ngFor="let button of config.toolbarSettings.toolbarExtraButtons; let j = index"
                 [ngClass]="button.class" type="button">{{ button.text }}</button>
         </div>
     </div>

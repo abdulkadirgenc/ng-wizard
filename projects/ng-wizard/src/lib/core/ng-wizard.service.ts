@@ -20,6 +20,10 @@ export class NgWizardService {
   getDefaultConfig(): NgWizardConfig {
     return { ...this.defaultConfig };
   }
+
+  getMergedWithDefaultConfig(config: NgWizardConfig): NgWizardConfig {
+    return merge(this.defaultConfig, config);
+  }
 }
 
 // https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6

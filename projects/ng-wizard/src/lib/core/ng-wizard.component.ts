@@ -13,27 +13,32 @@ export class NgWizardComponent implements OnInit {
   @Input() steps: NgWizardStep[];
   stepStates: NgWizardStepState[];
 
-  defaultConfig: NgWizardConfig;
-  mainClass: string;
-  navClass: string;
-  stepClass: string;
-  linkClass: string;
-  containerClass: string;
-  pageClass: string;
-  previousButtonClass: string;
-  nextButtonClass: string;
+  @Input() config: NgWizardConfig;
+  styles: {
+    main?: string;
+    nav?: string;
+    step?: string;
+    link?: string;
+    container?: string;
+    page?: string;
+    previousButton?: string;
+    nextButton?: string;
+    toolbarTop?: string;
+    toolbarBottom?: string;
+  } = {};
+
   showToolbarTop: boolean = false;
   showToolbarBottom: boolean = false;
   showExtraButtons: boolean = false;
-  toolbarTopClass: string;
-  toolbarBottomClass: string;
   current_index: number = null;// Active step index
+  currentStepState: NgWizardStepState; // Active step
 
   constructor(private ngService: NgWizardService) {
-    this.defaultConfig = this.ngService.getDefaultConfig();
   }
 
   ngOnInit() {
+    this.config = this.ngService.getMergedWithDefaultConfig(this.config);
+
     // set step states
     this._setStepStates();
 
@@ -47,26 +52,26 @@ export class NgWizardComponent implements OnInit {
     this._setEvents();
 
     // Show the initial step
-    this._showStep(this.defaultConfig.selected);
+    this._showStep(this.config.selected);
   }
 
   _setStepStates() {
     this.stepStates = this.steps.map((step, index) => <NgWizardStepState>{
       step: step,
       index: index,
-      disabledStep: this.defaultConfig.disabledSteps.includes(index),
-      errorStep: this.defaultConfig.errorSteps.includes(index),
-      hiddenStep: this.defaultConfig.hiddenSteps.includes(index)
+      disabledStep: this.config.disabledSteps.includes(index),
+      errorStep: this.config.errorSteps.includes(index),
+      hiddenStep: this.config.hiddenSteps.includes(index)
     });
 
     // Mark previous steps of the active step as done
-    if (this.defaultConfig.selected > 0
-      && this.defaultConfig.anchorSettings.markDoneStep
-      && this.defaultConfig.anchorSettings.markAllPreviousStepsAsDone) {
+    if (this.config.selected > 0
+      && this.config.anchorSettings.markDoneStep
+      && this.config.anchorSettings.markAllPreviousStepsAsDone) {
 
       this.stepStates.forEach(stepState => {
         if (!stepState.disabledStep && !stepState.hiddenStep) {
-          stepState.done = stepState.index < this.defaultConfig.selected
+          stepState.done = stepState.index < this.config.selected
         }
       });
     }
@@ -75,25 +80,35 @@ export class NgWizardComponent implements OnInit {
   // PRIVATE FUNCTIONS
   _setElements() {
     // Set the main element
-    this.mainClass = 'ng-wizard-main ng-wizard-theme-' + this.defaultConfig.theme;
+    this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
     // Set anchor elements
-    this.navClass = 'nav nav-tabs step-anchor'; // ul
-    this.stepClass = 'nav-item'; // li
-    this.linkClass = 'nav-link'; // a
+    this.styles.nav = 'nav nav-tabs step-anchor'; // ul
+    this.styles.step = 'nav-item'; // li
+    this.styles.link = 'nav-link'; // a
 
     // Make the anchor clickable
-    if (this.defaultConfig.anchorSettings.enableAllAnchors != false && this.defaultConfig.anchorSettings.anchorClickable != false) {
-      this.stepClass += ' clickable';
+    if (this.config.anchorSettings.enableAllAnchors != false && this.config.anchorSettings.anchorClickable != false) {
+      this.styles.step += ' clickable';
     }
 
     // Set content container
-    this.containerClass = 'container ng-wizard-container tab-content';
+    this.styles.container = 'ng-wizard-container tab-content';
     // Set content pages
-    this.pageClass = 'tab-pane step-content';
+    this.styles.page = 'tab-pane step-content';
+
+    if (this.config.cycleSteps) {
+      this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
+      this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
+    }
+    else {
+      // TODO
+      this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
+      this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
+    }
   }
 
   _getStepCssClass(selectedStepState: NgWizardStepState) {
-    var stepClass = this.stepClass;
+    var stepClass = this.styles.step;
 
     if (selectedStepState.disabledStep) {
       stepClass += ' disabled';
@@ -118,30 +133,40 @@ export class NgWizardComponent implements OnInit {
     return stepClass;
   }
 
+  _getPageCssClass(selectedStepState: NgWizardStepState) {
+    var pageClass = this.styles.page;
+
+    if (selectedStepState.index == this.current_index) {
+      pageClass += ' active';
+    }
+
+    return pageClass;
+  }
+
   _setToolbar() {
-    this.showToolbarTop = this.defaultConfig.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.top ||
-      this.defaultConfig.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
+    this.showToolbarTop = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.top ||
+      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
 
-    this.showToolbarBottom = this.defaultConfig.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.bottom ||
-      this.defaultConfig.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
+    this.showToolbarBottom = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.bottom ||
+      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
 
-    this.showExtraButtons = this.defaultConfig.toolbarSettings.toolbarExtraButtons && this.defaultConfig.toolbarSettings.toolbarExtraButtons.length > 0;
+    this.showExtraButtons = this.config.toolbarSettings.toolbarExtraButtons && this.config.toolbarSettings.toolbarExtraButtons.length > 0;
 
-    this.toolbarTopClass = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
-    this.toolbarBottomClass = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
+    this.styles.toolbarTop = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
+    this.styles.toolbarBottom = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
   }
 
   _setEvents() {
     //TODO: keyNavigation, backButtonSupport
     // Keyboard navigation event
-    if (this.defaultConfig.keyNavigation) {
+    if (this.config.keyNavigation) {
       // $(document).keyup(function (e) {
       //   mi._keyNav(e);
       // });
     }
 
     // Back/forward browser button event
-    if (this.defaultConfig.backButtonSupport) {
+    if (this.config.backButtonSupport) {
       // $(window).on('hashchange', function (e) {
       //   if (!mi.options.useURLhash) {
       //     return true;
@@ -160,16 +185,16 @@ export class NgWizardComponent implements OnInit {
   _showSelectedStep(event: Event, selectedStepState: NgWizardStepState) {
     event.preventDefault();
 
-    if (this.defaultConfig.anchorSettings.anchorClickable == false) {
+    if (this.config.anchorSettings.anchorClickable == false) {
       return;
     }
 
-    if (this.defaultConfig.anchorSettings.enableAnchorOnDoneStep == false && selectedStepState.done) {
+    if (this.config.anchorSettings.enableAnchorOnDoneStep == false && selectedStepState.done) {
       return true;
     }
 
     if (selectedStepState.index != this.current_index) {
-      if (this.defaultConfig.anchorSettings.enableAllAnchors && this.defaultConfig.anchorSettings.anchorClickable) {
+      if (this.config.anchorSettings.enableAllAnchors && this.config.anchorSettings.anchorClickable) {
         this._showStep(selectedStepState.index);
       }
       else {
@@ -184,11 +209,11 @@ export class NgWizardComponent implements OnInit {
     event.preventDefault();
     // Find the next not disabled & hidden step
     var filteredStepStates = this.stepStates.filter((stepState, stepIndex) => {
-      return stepIndex > this.current_index && !stepState.disabledStep && !stepState.hiddenStep;
+      return stepIndex > (this.current_index == null ? -1 : this.current_index) && !stepState.disabledStep && !stepState.hiddenStep;
     });
 
     if (filteredStepStates.length == 0) {
-      if (!this.defaultConfig.cycleSteps) {
+      if (!this.config.cycleSteps) {
         return;
       }
 
@@ -203,11 +228,11 @@ export class NgWizardComponent implements OnInit {
     event.preventDefault();
     // Find the previous not disabled & hidden step
     var filteredStepStates = this.stepStates.filter((stepState, stepIndex) => {
-      return stepIndex < this.current_index && !stepState.disabledStep && !stepState.hiddenStep;
+      return stepIndex < (this.current_index == null && this.config.cycleSteps ? this.stepStates.length : this.current_index) && !stepState.disabledStep && !stepState.hiddenStep;
     });
 
     if (filteredStepStates.length == 0) {
-      if (!this.defaultConfig.cycleSteps) {
+      if (!this.config.cycleSteps) {
         return;
       }
 
@@ -233,25 +258,22 @@ export class NgWizardComponent implements OnInit {
       return;
     }
 
-    // Get current step elements
-    var currentStepState = this.stepStates[this.current_index];
-
     // Load step content
-    this._loadStepContent(currentStepState, selectedStepState);
+    this._loadStepContent(selectedStepState);
   }
 
-  _loadStepContent(currentStepState: NgWizardStepState, selectedStepState: NgWizardStepState) {
+  _loadStepContent(selectedStepState: NgWizardStepState) {
     // Get the direction of step navigation
     var stepDirection = (this.current_index !== null && this.current_index !== selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
 
     // Trigger "leaveStep" event
-    if (this.current_index !== null && this._triggerEvent("leaveStep", [currentStepState, this.current_index, stepDirection]) === false) {
+    if (this.current_index !== null && this._triggerEvent("leaveStep", [this.currentStepState, this.current_index, stepDirection]) === false) {
       return;
     }
 
-    var contentURL = selectedStepState.step.contentURL && selectedStepState.step.contentURL.length > 0 ? selectedStepState.step.contentURL : this.defaultConfig.contentURL;
+    var contentURL = selectedStepState.step.contentURL && selectedStepState.step.contentURL.length > 0 ? selectedStepState.step.contentURL : this.config.contentURL;
 
-    if (contentURL && contentURL.length > 0 && (!selectedStepState.step.content || selectedStepState.step.content.length == 0 || !this.defaultConfig.contentCache)) {
+    if (contentURL && contentURL.length > 0 && (!selectedStepState.step.content || selectedStepState.step.content.length == 0 || !this.config.contentCache)) {
       // Get ajax content and then show step
       // TODO
       // var selPage = elm.length > 0 ? $(elm.attr("href"), this.main) : null;
@@ -281,11 +303,11 @@ export class NgWizardComponent implements OnInit {
       // $.ajax(ajaxSettings);
     } else {
       // Show step
-      this._transitPage(currentStepState, selectedStepState);
+      this._transitPage(selectedStepState);
     }
   }
 
-  _transitPage(currentStepState: NgWizardStepState, selectedStepState: NgWizardStepState) {
+  _transitPage(selectedStepState: NgWizardStepState) {
     // Get the direction of step navigation
     var stepDirection = (this.current_index !== null && this.current_index !== selectedStepState.index) ? (this.current_index < selectedStepState.index ? "forward" : "backward") : '';
     var stepPosition = (selectedStepState.index == 0) ? 'first' : (selectedStepState.index == this.steps.length - 1 ? 'final' : 'middle');
@@ -295,27 +317,28 @@ export class NgWizardComponent implements OnInit {
     // Change the url hash to new step
     // this._setURLHash(selectedStepState.href);
     // Update controls
-    this._setAnchor(currentStepState, selectedStepState);
+    this._setAnchor(selectedStepState);
     // Set the buttons based on the step
     this._setButtons(selectedStepState.index);
     // Fix height with content
     this._fixHeight(selectedStepState);
     // Update the current index
     this.current_index = selectedStepState.index;
+    this.currentStepState = selectedStepState;
 
     // Trigger "showStep" event
     this._triggerEvent("showStep", [selectedStepState, this.current_index, stepDirection, stepPosition]);
   }
 
-  _setAnchor(currentStepState: NgWizardStepState, selectedStepState: NgWizardStepState) {
+  _setAnchor(selectedStepState: NgWizardStepState) {
     // Current step anchor > Remove other classes and add done class
-    if (currentStepState) {
-      currentStepState.active = false;
+    if (this.currentStepState) {
+      this.currentStepState.active = false;
 
-      if (this.defaultConfig.anchorSettings.markDoneStep !== false) {
-        currentStepState.done = true;
+      if (this.config.anchorSettings.markDoneStep !== false) {
+        this.currentStepState.done = true;
 
-        if (this.defaultConfig.anchorSettings.removeDoneStepOnNavigateBack != false) {
+        if (this.config.anchorSettings.removeDoneStepOnNavigateBack != false) {
           this.stepStates.forEach(stepState => {
             if (stepState.index > selectedStepState.index) {
               stepState.done = false;
@@ -332,19 +355,19 @@ export class NgWizardComponent implements OnInit {
 
   _setButtons(stepIndex: number) {
     // Previous/Next Button enable/disable based on step
-    if (!this.defaultConfig.cycleSteps) {
+    if (!this.config.cycleSteps) {
       if (0 >= stepIndex) {
-        this.previousButtonClass = 'btn btn-secondary ng-wizard-btn-prev disabled';
+        this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev disabled';
       }
       else {
-        this.previousButtonClass = 'btn btn-secondary ng-wizard-btn-prev';
+        this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
       }
 
       if (this.stepStates.length - 1 <= stepIndex) {
-        this.nextButtonClass = 'btn btn-secondary ng-wizard-btn-next disabled';
+        this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next disabled';
       }
       else {
-        this.nextButtonClass = 'btn btn-secondary ng-wizard-btn-next';
+        this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
       }
     }
   }
@@ -371,7 +394,7 @@ export class NgWizardComponent implements OnInit {
   _fixHeight(selectedStepState: NgWizardStepState) {
     // TODO
     // // Auto adjust height of the container
-    if (this.defaultConfig.autoAdjustHeight) {
+    if (this.config.autoAdjustHeight) {
       // var selPage = this.steps.eq(idx).length > 0 ? $(this.steps.eq(idx).attr("href"), this.main) : null;
       // this.container.finish().animate({ minHeight: selPage.outerHeight() }, this.defaultConfig.transitionSpeed, function () { });
     }
@@ -390,7 +413,7 @@ export class NgWizardComponent implements OnInit {
   }
 
   _setURLHash(hash: string) {
-    if (this.defaultConfig.showStepURLhash && window.location.hash !== hash) {
+    if (this.config.showStepURLhash && window.location.hash !== hash) {
       window.location.hash = hash;
     }
   }

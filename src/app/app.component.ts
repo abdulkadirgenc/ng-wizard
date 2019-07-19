@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NgWizardStep } from 'projects/ng-wizard/src/lib/utils/interfaces';
+import { NgWizardStep, NgWizardConfig } from 'projects/ng-wizard/src/lib/utils/interfaces';
+import { THEME } from 'projects/ng-wizard/src/lib/utils/enums';
 
 @Component({
   selector: 'app-root',
@@ -36,4 +37,15 @@ export class AppComponent {
       content: 'Step 5 Content'
     },
   ];
+
+  config: NgWizardConfig = {
+    selected: 0,
+    theme: THEME.circles,
+    errorSteps: [1],
+    disabledSteps: [2],
+    hiddenSteps: [3],
+    toolbarSettings: {
+      toolbarExtraButtons: [{ text: 'Finish', class: 'btn btn-info' }, { text: 'Cancel', class: 'btn btn-danger' }]
+    }
+  };
 }
