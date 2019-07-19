@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
-import { NgWizardConfig, NgWizardStepDef, NgWizardStep } from '../utils/interfaces';
+import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton } from '../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
 import { Subscription } from 'rxjs';
 
@@ -101,16 +101,16 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this.config = this.ngService.getMergedWithDefaultConfig(this.defaultConfig);
 
     // set step states
-    this._setSteps();
+    this._initSteps();
 
     // Set the elements
-    this._setStyles();
+    this._initStyles();
 
     // Show the initial step
     this._showStep(this.config.selected);
   }
 
-  _setSteps() {
+  _initSteps() {
     this.steps = this.stepDefinitions.map((step, index) => <NgWizardStep>{
       definition: {
         title: step.title,
@@ -118,6 +118,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
         content: step.content,
         contentURL: step.contentURL,
         state: step.state || STEP_STATE.normal,
+        event: step.event,
       },
       index: index,
       status: STEP_STATUS.untouched,
@@ -137,7 +138,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   // PRIVATE FUNCTIONS
-  _setStyles() {
+  _initStyles() {
     // Set the main element
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
 
@@ -339,6 +340,10 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this.current_index = selectedStep.index;
     this.currentStep = selectedStep;
 
+    if (selectedStep.definition.event) {
+      selectedStep.definition.event(selectedStep);
+    }
+
     // Trigger "showStep" event
     this.stepChanged.emit({ step: selectedStep, direction: stepDirection, position: stepPosition });
   }
@@ -381,6 +386,12 @@ export class NgWizardComponent implements OnDestroy, OnInit {
       else {
         this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
       }
+    }
+  }
+
+  _extraButtonClicked(button: ToolbarButton) {
+    if (button.event) {
+      button.event();
     }
   }
 

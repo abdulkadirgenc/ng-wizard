@@ -18,7 +18,7 @@
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
             <button *ngFor="let button of config.toolbarSettings.toolbarExtraButtons; let j = index"
-                [ngClass]="button.class" type="button">{{ button.text }}</button>
+                [ngClass]="button.class" type="button" (click)="_extraButtonClicked(button)">{{ button.text }}</button>
         </div>
     </div>
 
@@ -38,7 +38,9 @@
 
         <div *ngIf="showExtraButtons" class="btn-group mr-2 sw-btn-group-extra" role="group">
             <button *ngFor="let button of config.toolbarSettings.toolbarExtraButtons; let j = index"
-                [ngClass]="button.class" type="button">{{ button.text }}</button>
+                [ngClass]="button.class" type="button" (click)="_extraButtonClicked(button)">{{ button.text }}</button>
         </div>
     </div>
+
+    <pre>{{ selectedStep | json }}</pre>
 </div>

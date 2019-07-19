@@ -10,12 +10,13 @@ export interface ToolbarSettings {
     toolbarButtonPosition?: TOOLBAR_BUTTON_POSITION;
     showNextButton?: boolean;
     showPreviousButton?: boolean;
-    toolbarExtraButtons?: Button[];
+    toolbarExtraButtons?: ToolbarButton[];
 }
 
-export interface Button {
+export interface ToolbarButton {
     text: string;
     class: string;
+    event?: () => void;
 }
 
 export interface AnchorSettings {
@@ -57,6 +58,7 @@ export interface NgWizardStepDef {
     content?: string;
     contentURL?: string;
     state?: STEP_STATE;
+    event?: (step: NgWizardStep) => void;
 }
 
 export interface NgWizardStep {
