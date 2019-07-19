@@ -24,7 +24,18 @@ export class NgWizardComponent implements OnDestroy, OnInit {
 
   steps: NgWizardStep[];
 
-  @Input() config: NgWizardConfig;
+
+  _defaultConfig: NgWizardConfig;
+  get defaultConfig(): NgWizardConfig {
+    return this._defaultConfig;
+  }
+
+  @Input('config')
+  set defaultConfig(defaultConfig: NgWizardConfig) {
+    this._defaultConfig = defaultConfig;
+  }
+
+  config: NgWizardConfig;
 
   @Output() stepChangeStarted = new EventEmitter<{ step: NgWizardStep, direction: string }>();
   @Output() stepChanged = new EventEmitter<{ step: NgWizardStep, direction: string, position: string }>();
@@ -56,15 +67,13 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.config = this.ngService.getMergedWithDefaultConfig(this.config);
+    this._init();
 
     // Set toolbar
     this._setToolbar();
 
     // Assign plugin events
     this._setEvents();
-
-    this._init();
 
     this.resetWizardWatcher = this.ngService.resetWizard$
       .subscribe(() => {
@@ -88,6 +97,9 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _init() {
+    // set config
+    this.config = this.ngService.getMergedWithDefaultConfig(this.defaultConfig);
+
     // set step states
     this._setSteps();
 
@@ -144,15 +156,9 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     // Set content pages
     this.styles.page = 'tab-pane step-content';
 
-    if (this.config.cycleSteps) {
-      this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
-      this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
-    }
-    else {
-      // TODO
-      this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
-      this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
-    }
+    // Set previous&next buttons 
+    this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
+    this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
   }
 
   _setToolbar() {
@@ -310,33 +316,10 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     var contentURL = selectedStep.definition.contentURL && selectedStep.definition.contentURL.length > 0 ? selectedStep.definition.contentURL : this.config.contentURL;
 
     if (contentURL && contentURL.length > 0 && (!selectedStep.definition.content || selectedStep.definition.content.length == 0 || !this.config.contentCache)) {
-      // Get ajax content and then show step
-      // TODO
-      // var selPage = elm.length > 0 ? $(elm.attr("href"), this.main) : null;
-
-      // var ajaxSettings = $.extend(true, {}, {
-      //   url: contentURL,
-      //   type: "POST",
-      //   data: { step_number: idx },
-      //   dataType: "text",
-      //   beforeSend: function () {
-      //     mi._loader('show');
-      //   },
-      //   error: function (jqXHR, status, message) {
-      //     mi._loader('hide');
-      //     $.error(message);
-      //   },
-      //   success: function (res) {
-      //     if (res && res.length > 0) {
-      //       elm.data('has-content', true);
-      //       selPage.html(res);
-      //     }
-      //     mi._loader('hide');
-      //     mi._transitPage(idx);
-      //   }
-      // }, this.options.ajaxSettings);
-
-      // $.ajax(ajaxSettings);
+      this._showLoader();
+      // TODO: Get ajax content and then show step
+      this._transitPage(selectedStep);
+      this._hideLoader();
     } else {
       // Show step
       this._transitPage(selectedStep);
@@ -420,18 +403,12 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     }
   }
 
-  _loader(action: string) {
-    // TODO
-    // switch (action) {
-    //   case 'show':
-    //     this.main.addClass('ng-wizard-loading');
-    //     break;
-    //   case 'hide':
-    //     this.main.removeClass('ng-wizard-loading');
-    //     break;
-    //   default:
-    //     this.main.toggleClass('ng-wizard-loading');
-    // }
+  _showLoader() {
+    this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme + ' ng-wizard-loading';
+  }
+
+  _hideLoader() {
+    this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
   }
 
   // PUBLIC FUNCTIONS
