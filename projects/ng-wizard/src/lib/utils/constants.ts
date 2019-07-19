@@ -4,10 +4,10 @@ import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION/*, TRANSITION_EFFECT*/, THEME
 export const DEFAULT_CONFIG: NgWizardConfig = {
     selected: 0,
     keyNavigation: true,
-    autoAdjustHeight: true,
+    // autoAdjustHeight: true,
     cycleSteps: false,
     // backButtonSupport: true,
-    //useURLhash: true,
+    // useURLhash: true,
     showStepURLhash: true,
     lang: {
         next: 'Next',

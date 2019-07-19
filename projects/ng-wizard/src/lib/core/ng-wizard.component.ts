@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
 import { NgWizardConfig, NgWizardStepDef, NgWizardStep } from '../utils/interfaces';
@@ -25,6 +25,11 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   steps: NgWizardStep[];
 
   @Input() config: NgWizardConfig;
+
+  @Output() stepChangeStarted = new EventEmitter<{ step: NgWizardStep, direction: string }>();
+  @Output() stepChanged = new EventEmitter<{ step: NgWizardStep, direction: string, position: string }>();
+  @Output() themeChanged = new EventEmitter<THEME>();
+  @Output() reseted = new EventEmitter<void>();
 
   styles: {
     main?: string;
@@ -300,9 +305,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     var stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
 
     // Trigger "leaveStep" event
-    if (this.current_index != null && this._triggerEvent("leaveStep", [this.currentStep, this.current_index, stepDirection]) == false) {
-      return;
-    }
+    this.stepChangeStarted.emit({ step: this.currentStep, direction: stepDirection });
 
     var contentURL = selectedStep.definition.contentURL && selectedStep.definition.contentURL.length > 0 ? selectedStep.definition.contentURL : this.config.contentURL;
 
@@ -349,14 +352,12 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this._setAnchor(selectedStep);
     // Set the buttons based on the step
     this._setButtons(selectedStep.index);
-    // Fix height with content
-    this._fixHeight(selectedStep);
     // Update the current index
     this.current_index = selectedStep.index;
     this.currentStep = selectedStep;
 
     // Trigger "showStep" event
-    this._triggerEvent("showStep", [selectedStep, this.current_index, stepDirection, stepPosition]);
+    this.stepChanged.emit({ step: selectedStep, direction: stepDirection, position: stepPosition });
   }
 
   _setAnchor(selectedStep: NgWizardStep) {
@@ -419,27 +420,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     }
   }
 
-  _fixHeight(selectedStep: NgWizardStep) {
-    // TODO
-    // // Auto adjust height of the container
-    if (this.config.autoAdjustHeight) {
-      // var selPage = this.steps.eq(idx).length > 0 ? $(this.steps.eq(idx).attr("href"), this.main) : null;
-      // this.container.finish().animate({ minHeight: selPage.outerHeight() }, this.defaultConfig.transitionSpeed, function () { });
-    }
-  }
-
-  _triggerEvent(name: string, params?: any[]): boolean {
-    // TODO
-    // // Trigger an event
-    // var e = $.Event(name);
-    // this.main.trigger(e, params);
-    // if (e.isDefaultPrevented()) {
-    //     return false;
-    // }
-    // return e.result;
-    return true;
-  }
-
   _loader(action: string) {
     // TODO
     // switch (action) {
@@ -464,21 +444,16 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
 
     // Trigger "themeChanged" event
-    this._triggerEvent("themeChanged", [this.config.theme]);
+    this.themeChanged.emit(this.config.theme);
   }
 
   _reset() {
-    // Trigger "beginReset" event
-    if (this._triggerEvent("beginReset") == false) {
-      return;
-    }
-
     // Reset all elements and classes
     this.current_index = null;
     this._init();
 
-    // Trigger "endReset" event
-    this._triggerEvent("endReset");
+    // Trigger "reseted" event
+    this.reseted.emit();
   }
 
   ngOnDestroy() {
