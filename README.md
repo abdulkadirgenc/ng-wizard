@@ -2,7 +2,7 @@
 Angular Wizard - Stepper
 
 
-**`Development is not yet completed`**
+**`Development is not yet completed.`**
 
 **`Angular version of `[techlab/SmartWizard - jQuery Smart Wizard 4](https://github.com/techlab/smartwizard)`.`**
 
