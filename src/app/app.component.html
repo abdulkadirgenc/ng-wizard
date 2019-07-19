@@ -1,3 +1,11 @@
 <div class="container">
     <ng-wizard [steps]="steps" [config]="config"></ng-wizard>
+    <div>
+        <button type="button" (click)="showPreviousStep($event)">Previous</button>
+        <button type="button" (click)="showNextStep($event)">Next</button>
+        <button type="button" (click)="resetWizard($event)">Reset</button>
+        <select [(ngModel)]="selectedtheme" (change)="themeSelected()">
+            <option *ngFor="let theme of themes" [ngValue]="theme">{{theme}}</option>
+        </select>
+    </div>
 </div>

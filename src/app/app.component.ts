@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgWizardStepDef, NgWizardConfig } from 'projects/ng-wizard/src/lib/utils/interfaces';
 import { THEME, STEP_STATE } from 'projects/ng-wizard/src/lib/utils/enums';
+import { NgWizardService } from 'projects/ng-wizard/src/lib/core/ng-wizard.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,6 @@ import { THEME, STEP_STATE } from 'projects/ng-wizard/src/lib/utils/enums';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ng-wizard-app';
 
   steps: NgWizardStepDef[] = [
     {
@@ -48,4 +48,26 @@ export class AppComponent {
       toolbarExtraButtons: [{ text: 'Finish', class: 'btn btn-info' }, { text: 'Cancel', class: 'btn btn-danger' }]
     }
   };
+
+  selectedtheme: THEME;
+  themes = [THEME.default, THEME.arrows, THEME.circles, THEME.dots];
+
+  constructor(private ngWizardService: NgWizardService) {
+  }
+
+  showPreviousStep(event: Event) {
+    this.ngWizardService.previous();
+  }
+
+  showNextStep(event: Event) {
+    this.ngWizardService.next();
+  }
+
+  resetWizard(event: Event) {
+    this.ngWizardService.reset();
+  }
+
+  themeSelected() {
+    this.ngWizardService.theme(this.selectedtheme);
+  }
 }

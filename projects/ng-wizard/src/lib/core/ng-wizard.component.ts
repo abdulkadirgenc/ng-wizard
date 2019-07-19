@@ -1,15 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
 import { NgWizardConfig, NgWizardStepDef, NgWizardStep } from '../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ng-wizard',
   templateUrl: './ng-wizard.component.html',
   styleUrls: ['./ng-wizard.component.css'],
 })
-export class NgWizardComponent implements OnInit {
+export class NgWizardComponent implements OnDestroy, OnInit {
+
   _stepDefinitions: NgWizardStepDef[];
   get stepDefinitions(): NgWizardStepDef[] {
     return this._stepDefinitions;
@@ -23,6 +25,7 @@ export class NgWizardComponent implements OnInit {
   steps: NgWizardStep[];
 
   @Input() config: NgWizardConfig;
+
   styles: {
     main?: string;
     step?: string;
@@ -36,30 +39,55 @@ export class NgWizardComponent implements OnInit {
   showToolbarTop: boolean = false;
   showToolbarBottom: boolean = false;
   showExtraButtons: boolean = false;
-  current_index: number = null;// Active step index
+  current_index: number = null; // Active step index
   currentStep: NgWizardStep; // Active step
+
+  resetWizardWatcher: Subscription;
+  showNextStepWatcher: Subscription;
+  showPreviousStepWatcher: Subscription;
+  setThemeWatcher: Subscription;
 
   constructor(private ngService: NgWizardService) {
   }
 
   ngOnInit() {
+    this.config = this.ngService.getMergedWithDefaultConfig(this.config);
+
+    // Set toolbar
+    this._setToolbar();
+
+    // Assign plugin events
+    this._setEvents();
+
     this._init();
+
+    this.resetWizardWatcher = this.ngService.resetWizard$
+      .subscribe(() => {
+        this._reset();
+      });
+
+    this.showNextStepWatcher = this.ngService.showNextStep$
+      .subscribe(() => {
+        this._showNextStep();
+      });
+
+    this.showPreviousStepWatcher = this.ngService.showPreviousStep$
+      .subscribe(() => {
+        this._showPreviousStep();
+      });
+
+    this.setThemeWatcher = this.ngService.setTheme$
+      .subscribe(theme => {
+        this._setTheme(theme);
+      });
   }
 
   _init() {
-    this.config = this.ngService.getMergedWithDefaultConfig(this.config);
-
     // set step states
     this._setSteps();
 
     // Set the elements
     this._setStyles();
-
-    // Add toolbar
-    this._setToolbar();
-
-    // Assign plugin events
-    this._setEvents();
 
     // Show the initial step
     this._showStep(this.config.selected);
@@ -427,7 +455,7 @@ export class NgWizardComponent implements OnInit {
   }
 
   // PUBLIC FUNCTIONS
-  setTheme(theme: THEME) {
+  _setTheme(theme: THEME) {
     if (this.config.theme == theme) {
       return false;
     }
@@ -439,15 +467,7 @@ export class NgWizardComponent implements OnInit {
     this._triggerEvent("themeChanged", [this.config.theme]);
   }
 
-  next() {
-    this._showNextStep();
-  }
-
-  prev() {
-    this._showPreviousStep();
-  }
-
-  reset() {
+  _reset() {
     // Trigger "beginReset" event
     if (this._triggerEvent("beginReset") == false) {
       return;
@@ -459,5 +479,23 @@ export class NgWizardComponent implements OnInit {
 
     // Trigger "endReset" event
     this._triggerEvent("endReset");
+  }
+
+  ngOnDestroy() {
+    if (this.resetWizardWatcher) {
+      this.resetWizardWatcher.unsubscribe();
+    }
+
+    if (this.showNextStepWatcher) {
+      this.showNextStepWatcher.unsubscribe();
+    }
+
+    if (this.showPreviousStepWatcher) {
+      this.showPreviousStepWatcher.unsubscribe();
+    }
+
+    if (this.setThemeWatcher) {
+      this.setThemeWatcher.unsubscribe();
+    }
   }
 }
