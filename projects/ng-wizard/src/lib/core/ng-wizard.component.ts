@@ -64,14 +64,18 @@ export class NgWizardComponent implements OnInit {
       && this.defaultConfig.anchorSettings.markDoneStep
       && this.defaultConfig.anchorSettings.markAllPreviousStepsAsDone) {
 
-      this.stepStates.forEach(stepState => { stepState.done = stepState.index < this.defaultConfig.selected });
+      this.stepStates.forEach(stepState => {
+        if (!stepState.disabledStep && !stepState.hiddenStep) {
+          stepState.done = stepState.index < this.defaultConfig.selected
+        }
+      });
     }
   }
 
   // PRIVATE FUNCTIONS
   _setElements() {
     // Set the main element
-    this.mainClass = 'sw-main sw-theme-' + this.defaultConfig.theme;
+    this.mainClass = 'ng-wizard-main ng-wizard-theme-' + this.defaultConfig.theme;
     // Set anchor elements
     this.navClass = 'nav nav-tabs step-anchor'; // ul
     this.stepClass = 'nav-item'; // li
@@ -83,7 +87,7 @@ export class NgWizardComponent implements OnInit {
     }
 
     // Set content container
-    this.containerClass = 'container sw-container tab-content';
+    this.containerClass = 'container ng-wizard-container tab-content';
     // Set content pages
     this.pageClass = 'tab-pane step-content';
   }
@@ -123,8 +127,8 @@ export class NgWizardComponent implements OnInit {
 
     this.showExtraButtons = this.defaultConfig.toolbarSettings.toolbarExtraButtons && this.defaultConfig.toolbarSettings.toolbarExtraButtons.length > 0;
 
-    this.toolbarTopClass = 'btn-toolbar sw-toolbar sw-toolbar-top justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
-    this.toolbarBottomClass = 'btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
+    this.toolbarTopClass = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
+    this.toolbarBottomClass = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.defaultConfig.toolbarSettings.toolbarButtonPosition;
   }
 
   _setEvents() {
@@ -322,6 +326,7 @@ export class NgWizardComponent implements OnInit {
     }
 
     // Next step anchor > Remove other classes and add active class
+    selectedStepState.done = false;
     selectedStepState.active = true;
   }
 
@@ -329,17 +334,17 @@ export class NgWizardComponent implements OnInit {
     // Previous/Next Button enable/disable based on step
     if (!this.defaultConfig.cycleSteps) {
       if (0 >= stepIndex) {
-        this.previousButtonClass = 'btn btn-secondary sw-btn-prev disabled';
+        this.previousButtonClass = 'btn btn-secondary ng-wizard-btn-prev disabled';
       }
       else {
-        this.previousButtonClass = 'btn btn-secondary sw-btn-prev';
+        this.previousButtonClass = 'btn btn-secondary ng-wizard-btn-prev';
       }
 
       if (this.stepStates.length - 1 <= stepIndex) {
-        this.nextButtonClass = 'btn btn-secondary sw-btn-next disabled';
+        this.nextButtonClass = 'btn btn-secondary ng-wizard-btn-next disabled';
       }
       else {
-        this.nextButtonClass = 'btn btn-secondary sw-btn-next';
+        this.nextButtonClass = 'btn btn-secondary ng-wizard-btn-next';
       }
     }
   }
@@ -394,13 +399,13 @@ export class NgWizardComponent implements OnInit {
     // TODO
     // switch (action) {
     //   case 'show':
-    //     this.main.addClass('sw-loading');
+    //     this.main.addClass('ng-wizard-loading');
     //     break;
     //   case 'hide':
-    //     this.main.removeClass('sw-loading');
+    //     this.main.removeClass('ng-wizard-loading');
     //     break;
     //   default:
-    //     this.main.toggleClass('sw-loading');
+    //     this.main.toggleClass('ng-wizard-loading');
     // }
   }
 
@@ -410,9 +415,9 @@ export class NgWizardComponent implements OnInit {
     // if (this.options.theme === v) {
     //   return false;
     // }
-    // this.main.removeClass('sw-theme-' + this.options.theme);
+    // this.main.removeClass('ng-wizard-theme-' + this.options.theme);
     // this.options.theme = v;
-    // this.main.addClass('sw-theme-' + this.options.theme);
+    // this.main.addClass('ng-wizard-theme-' + this.options.theme);
     // // Trigger "themeChanged" event
     // this._triggerEvent("themeChanged", [this.options.theme]);
   }
@@ -438,7 +443,7 @@ export class NgWizardComponent implements OnInit {
     // this.pages.hide();
     // this.current_index = null;
     // this._setURLHash(this.steps.eq(this.options.selected).attr("href"));
-    // $(".sw-toolbar", this.main).remove();
+    // $(".ng-wizard-toolbar", this.main).remove();
     // this.steps.removeClass();
     // this.steps.parents('li').removeClass();
     // this.steps.data('has-content', false);

@@ -10,9 +10,9 @@ import { THEME } from 'projects/ng-wizard/src/lib/utils/enums';
 const ngWizardConfig: NgWizardConfig = {
   selected: 3,
   theme: THEME.arrows,
-  //disabledSteps: [0],
-  errorSteps: [1],
-  //hiddenSteps: [2],
+  errorSteps: [0],
+  disabledSteps: [1],
+  hiddenSteps: [2],
   toolbarSettings: {
     toolbarExtraButtons: [{ text: 'Finish', class: 'btn btn-info' }, { text: 'Cancel', class: 'btn btn-danger' }]
   }
