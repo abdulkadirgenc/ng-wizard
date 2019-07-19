@@ -16,10 +16,7 @@ export class NgWizardComponent implements OnInit {
   @Input() config: NgWizardConfig;
   styles: {
     main?: string;
-    nav?: string;
     step?: string;
-    link?: string;
-    container?: string;
     page?: string;
     previousButton?: string;
     nextButton?: string;
@@ -43,7 +40,7 @@ export class NgWizardComponent implements OnInit {
     this._setStepStates();
 
     // Set the elements
-    this._setElements();
+    this._setStyles();
 
     // Add toolbar
     this._setToolbar();
@@ -75,21 +72,22 @@ export class NgWizardComponent implements OnInit {
   }
 
   // PRIVATE FUNCTIONS
-  _setElements() {
+  _setStyles() {
     // Set the main element
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
+
     // Set anchor elements
-    this.styles.nav = 'nav nav-tabs step-anchor'; // ul
     this.styles.step = 'nav-item'; // li
-    this.styles.link = 'nav-link'; // a
 
     // Make the anchor clickable
     if (this.config.anchorSettings.enableAllAnchors != false && this.config.anchorSettings.anchorClickable != false) {
       this.styles.step += ' clickable';
     }
 
-    // Set content container
-    this.styles.container = 'ng-wizard-container tab-content';
+    // Set the toolbar styles
+    this.styles.toolbarTop = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
+    this.styles.toolbarBottom = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
+
     // Set content pages
     this.styles.page = 'tab-pane step-content';
 
@@ -101,6 +99,42 @@ export class NgWizardComponent implements OnInit {
       // TODO
       this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
       this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
+    }
+  }
+
+  _setToolbar() {
+    this.showToolbarTop = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.top ||
+      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
+
+    this.showToolbarBottom = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.bottom ||
+      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
+
+    this.showExtraButtons = this.config.toolbarSettings.toolbarExtraButtons && this.config.toolbarSettings.toolbarExtraButtons.length > 0;
+  }
+
+  _setEvents() {
+    //TODO: keyNavigation, backButtonSupport
+    // Keyboard navigation event
+    if (this.config.keyNavigation) {
+      // $(document).keyup(function (e) {
+      //   mi._keyNav(e);
+      // });
+    }
+
+    // Back/forward browser button event
+    if (this.config.backButtonSupport) {
+      // $(window).on('hashchange', function (e) {
+      //   if (!mi.options.useURLhash) {
+      //     return true;
+      //   }
+      //   if (window.location.hash) {
+      //     var elm = $("a[href*='" + window.location.hash + "']", mi.nav);
+      //     if (elm && elm.length > 0) {
+      //       e.preventDefault();
+      //       mi._showStep(mi.steps.index(elm));
+      //     }
+      //   }
+      // });
     }
   }
 
@@ -139,45 +173,6 @@ export class NgWizardComponent implements OnInit {
     }
 
     return pageClass;
-  }
-
-  _setToolbar() {
-    this.showToolbarTop = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.top ||
-      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
-
-    this.showToolbarBottom = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.bottom ||
-      this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
-
-    this.showExtraButtons = this.config.toolbarSettings.toolbarExtraButtons && this.config.toolbarSettings.toolbarExtraButtons.length > 0;
-
-    this.styles.toolbarTop = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
-    this.styles.toolbarBottom = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
-  }
-
-  _setEvents() {
-    //TODO: keyNavigation, backButtonSupport
-    // Keyboard navigation event
-    if (this.config.keyNavigation) {
-      // $(document).keyup(function (e) {
-      //   mi._keyNav(e);
-      // });
-    }
-
-    // Back/forward browser button event
-    if (this.config.backButtonSupport) {
-      // $(window).on('hashchange', function (e) {
-      //   if (!mi.options.useURLhash) {
-      //     return true;
-      //   }
-      //   if (window.location.hash) {
-      //     var elm = $("a[href*='" + window.location.hash + "']", mi.nav);
-      //     if (elm && elm.length > 0) {
-      //       e.preventDefault();
-      //       mi._showStep(mi.steps.index(elm));
-      //     }
-      //   }
-      // });
-    }
   }
 
   _showSelectedStep(event: Event, selectedStepState: NgWizardStepState) {
