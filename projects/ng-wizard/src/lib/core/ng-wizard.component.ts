@@ -141,7 +141,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this.styles.step = 'nav-item'; // li
 
     // Make the anchor clickable
-    if (this.config.anchorSettings.enableAllAnchors != false && this.config.anchorSettings.anchorClickable != false) {
+    if (this.config.anchorSettings.enableAllAnchors && this.config.anchorSettings.anchorClickable) {
       this.styles.step += ' clickable';
     }
 
@@ -217,11 +217,11 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   _showSelectedStep(event: Event, selectedStep: NgWizardStep) {
     event.preventDefault();
 
-    if (this.config.anchorSettings.anchorClickable == false) {
+    if (!this.config.anchorSettings.anchorClickable) {
       return;
     }
 
-    if (this.config.anchorSettings.enableAnchorOnDoneStep == false && selectedStep.status == STEP_STATUS.done) {
+    if (!this.config.anchorSettings.enableAnchorOnDoneStep && selectedStep.status == STEP_STATUS.done) {
       return true;
     }
 
@@ -344,10 +344,10 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     if (this.currentStep) {
       this.currentStep.status = STEP_STATUS.untouched;
 
-      if (this.config.anchorSettings.markDoneStep != false) {
+      if (this.config.anchorSettings.markDoneStep) {
         this.currentStep.status = STEP_STATUS.done;
 
-        if (this.config.anchorSettings.removeDoneStepOnNavigateBack != false) {
+        if (this.config.anchorSettings.removeDoneStepOnNavigateBack) {
           this.steps.forEach(step => {
             if (step.index > selectedStep.index) {
               step.status = STEP_STATUS.untouched;
