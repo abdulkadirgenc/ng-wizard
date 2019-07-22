@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
-import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton } from '../utils/interfaces';
+import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton, stepChangedArgs } from '../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
 import { Subscription } from 'rxjs';
 import { merge } from '../utils/functions';
@@ -38,8 +38,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
 
   config: NgWizardConfig;
 
-  @Output() stepChangeStarted = new EventEmitter<{ step: NgWizardStep, direction: string }>();
-  @Output() stepChanged = new EventEmitter<{ step: NgWizardStep, direction: string, position: string }>();
+  @Output() stepChanged = new EventEmitter<stepChangedArgs>();
   @Output() themeChanged = new EventEmitter<THEME>();
   @Output() reseted = new EventEmitter<void>();
 
@@ -304,12 +303,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _loadStepContent(selectedStep: NgWizardStep) {
-    // Get the direction of step navigation
-    var stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
-
-    // Trigger "leaveStep" event
-    this.stepChangeStarted.emit({ step: this.currentStep, direction: stepDirection });
-
     var contentURL = selectedStep.definition.contentURL && selectedStep.definition.contentURL.length > 0 ? selectedStep.definition.contentURL : this.config.contentURL;
 
     if (contentURL && contentURL.length > 0 && (!selectedStep.definition.content || selectedStep.definition.content.length == 0 || !this.config.contentCache)) {
@@ -332,16 +325,18 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this._setAnchor(selectedStep);
     // Set the buttons based on the step
     this._setButtons(selectedStep.index);
+
+    // Trigger "stepChanged" event
+    this.stepChanged.emit({
+      step: selectedStep,
+      previousStep: this.currentStep,
+      direction: stepDirection,
+      position: stepPosition
+    });
+
     // Update the current index
     this.current_index = selectedStep.index;
     this.currentStep = selectedStep;
-
-    if (selectedStep.definition.event) {
-      selectedStep.definition.event(selectedStep);
-    }
-
-    // Trigger "showStep" event
-    this.stepChanged.emit({ step: selectedStep, direction: stepDirection, position: stepPosition });
   }
 
   _setAnchor(selectedStep: NgWizardStep) {

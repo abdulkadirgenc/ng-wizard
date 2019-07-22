@@ -9,7 +9,7 @@ import { NgWizardConfig } from 'projects/ng-wizard/src/lib/utils/interfaces';
 import { THEME } from 'projects/ng-wizard/src/lib/utils/enums';
 
 const ngWizardConfig: NgWizardConfig = {
-  theme: THEME.arrows
+  theme: THEME.default
 };
 
 @NgModule({

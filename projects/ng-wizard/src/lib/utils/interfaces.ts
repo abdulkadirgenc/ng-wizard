@@ -58,11 +58,17 @@ export interface NgWizardStepDef {
     content?: string;
     contentURL?: string;
     state?: STEP_STATE;
-    event?: (step: NgWizardStep) => void;
 }
 
 export interface NgWizardStep {
     definition: NgWizardStepDef;
     index: number;
     status?: STEP_STATUS;
+}
+
+export interface stepChangedArgs {
+    step: NgWizardStep,
+    previousStep: NgWizardStep,
+    direction: string,
+    position: string
 }
