@@ -4,6 +4,7 @@ import { NgWizardService } from './ng-wizard.service';
 import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton } from '../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
 import { Subscription } from 'rxjs';
+import { merge } from '../utils/functions';
 
 @Component({
   selector: 'ng-wizard',
@@ -25,14 +26,14 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   steps: NgWizardStep[];
 
 
-  _defaultConfig: NgWizardConfig;
-  get defaultConfig(): NgWizardConfig {
-    return this._defaultConfig;
+  _pConfig: NgWizardConfig;
+  get pConfig(): NgWizardConfig {
+    return this._pConfig;
   }
 
   @Input('config')
-  set defaultConfig(defaultConfig: NgWizardConfig) {
-    this._defaultConfig = defaultConfig;
+  set pConfig(config: NgWizardConfig) {
+    this._pConfig = config;
   }
 
   config: NgWizardConfig;
@@ -98,7 +99,8 @@ export class NgWizardComponent implements OnDestroy, OnInit {
 
   _init() {
     // set config
-    this.config = this.ngService.getMergedWithDefaultConfig(this.defaultConfig);
+    var defaultConfig = this.ngService.getDefaultConfig();
+    this.config = merge(defaultConfig, this.pConfig);
 
     // set step states
     this._initSteps();
@@ -111,15 +113,9 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _initSteps() {
+
     this.steps = this.stepDefinitions.map((step, index) => <NgWizardStep>{
-      definition: {
-        title: step.title,
-        description: step.description,
-        content: step.content,
-        contentURL: step.contentURL,
-        state: step.state || STEP_STATE.normal,
-        event: step.event,
-      },
+      definition: merge({ state: STEP_STATE.normal }, step),
       index: index,
       status: STEP_STATUS.untouched,
     });
