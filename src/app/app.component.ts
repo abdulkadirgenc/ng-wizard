@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgWizardStepDef, NgWizardConfig, stepChangedArgs } from 'projects/ng-wizard/src/lib/utils/interfaces';
+import { NgWizardStepDef, NgWizardConfig, StepChangedArgs } from 'projects/ng-wizard/src/lib/utils/interfaces';
 import { THEME, STEP_STATE } from 'projects/ng-wizard/src/lib/utils/enums';
 import { NgWizardService } from 'projects/ng-wizard/src/lib/core/ng-wizard.service';
 
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     }
   };
 
-  stepChangedArgs: stepChangedArgs;
+  stepChangedArgs: StepChangedArgs;
   selectedtheme: THEME;
   themes = [THEME.default, THEME.arrows, THEME.circles, THEME.dots];
 
@@ -79,7 +79,7 @@ export class AppComponent implements OnInit {
     this.ngWizardService.theme(this.selectedtheme);
   }
 
-  stepChanged(args: stepChangedArgs) {
+  stepChanged(args: StepChangedArgs) {
     console.log(args.step);
     this.stepChangedArgs = args;
   }

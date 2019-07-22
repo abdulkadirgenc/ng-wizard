@@ -28,10 +28,6 @@ export interface AnchorSettings {
     enableAnchorOnDoneStep?: boolean;
 }
 
-export interface AjaxSettings {
-}
-
-
 export interface NgWizardConfig {
     selected?: number; // Initial selected step, 0 = first step
     keyNavigation?: boolean; // Enable/Disable keyboard navigation(left and right keys are used if enabled)
@@ -66,7 +62,7 @@ export interface NgWizardStep {
     status?: STEP_STATUS;
 }
 
-export interface stepChangedArgs {
+export interface StepChangedArgs {
     step: NgWizardStep,
     previousStep: NgWizardStep,
     direction: string,

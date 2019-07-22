@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "build": "ng build",
+    "build": "ng build ng-wizard && ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

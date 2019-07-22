@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 import { NgWizardService } from './ng-wizard.service';
-import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton, stepChangedArgs } from '../utils/interfaces';
+import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton, StepChangedArgs } from '../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../utils/enums';
 import { Subscription } from 'rxjs';
 import { merge } from '../utils/functions';
@@ -38,7 +38,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
 
   config: NgWizardConfig;
 
-  @Output() stepChanged = new EventEmitter<stepChangedArgs>();
+  @Output() stepChanged = new EventEmitter<StepChangedArgs>();
   @Output() themeChanged = new EventEmitter<THEME>();
   @Output() reseted = new EventEmitter<void>();
 
