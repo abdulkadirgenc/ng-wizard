@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -o",
-    "build": "ng build ng-wizard && ng build",
-    "test": "ng test",
-    "lint": "ng lint",
+    "start": "ng serve -o --port=4201",
+    "build": "ng build ng-wizard && npm run copy-themes && npm run copy-files",
+    "copy-themes": "mkdir dist\\ng-wizard\\themes && copy projects\\ng-wizard\\src\\themes\\*.css dist\\ng-wizard\\themes",
+    "copy-files": "copy README.md dist\\ng-wizard && copy LICENSE dist\\ng-wizard",
+    "test": "ng test ng-wizard",
+    "lint": "ng lint ng-wizard",
     "e2e": "ng e2e"
   },
   "private": true,
