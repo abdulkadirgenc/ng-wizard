@@ -135,7 +135,7 @@
       "root": "projects/ng-wizard",
       "sourceRoot": "projects/ng-wizard/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "ng",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
