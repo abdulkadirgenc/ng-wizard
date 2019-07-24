@@ -4,9 +4,9 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgWizardModule } from 'src/ng-wizard/src/public-api';
-import { NgWizardConfig } from 'src/ng-wizard/src/lib/utils/interfaces';
-import { THEME } from 'src/ng-wizard/src/lib/utils/enums';
+import { NgWizardModule } from 'src/ng-wizard/public-api';
+import { NgWizardConfig } from 'src/ng-wizard/lib/utils/interfaces';
+import { THEME } from 'src/ng-wizard/lib/utils/enums';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.default

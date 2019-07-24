@@ -133,7 +133,7 @@
     },
     "ng-wizard": {
       "root": "src/ng-wizard",
-      "sourceRoot": "src/ng-wizard/src",
+      "sourceRoot": "src/ng-wizard",
       "projectType": "library",
       "prefix": "ng",
       "architect": {
@@ -147,7 +147,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/ng-wizard/src/test.ts",
+            "main": "src/ng-wizard/test.ts",
             "tsConfig": "src/ng-wizard/tsconfig.spec.json",
             "karmaConfig": "src/ng-wizard/karma.conf.js"
           }
