@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgWizardStepDef, NgWizardConfig, StepChangedArgs, NgWizardService, THEME, STEP_STATE } from 'ng-wizard';
+import { NgWizardStepDef, NgWizardConfig, StepChangedArgs, NgWizardService, THEME, STEP_STATE } from '../../ng-wizard/public-api'; //'ng-wizard'
 
 @Component({
   selector: 'app-root',

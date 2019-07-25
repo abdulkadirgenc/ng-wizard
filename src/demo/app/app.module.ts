@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { NgWizardModule, NgWizardConfig, THEME } from 'ng-wizard';
+import { NgWizardModule, NgWizardConfig, THEME } from '../../ng-wizard/public-api'; //'ng-wizard'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
