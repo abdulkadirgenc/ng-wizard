@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgWizardService } from '../ng-wizard.service';
-import { NgWizardConfig, NgWizardStepDef, NgWizardStep, ToolbarButton, StepChangedArgs } from '../../utils/interfaces';
+import { NgWizardConfig, NgWizardStep, ToolbarButton, StepChangedArgs } from '../../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../../utils/enums';
-import { Subscription } from 'rxjs';
 import { merge } from '../../utils/functions';
 
 @Component({
@@ -11,20 +11,10 @@ import { merge } from '../../utils/functions';
   templateUrl: './ng-wizard.component.html',
   styleUrls: ['./ng-wizard.component.css'],
 })
-export class NgWizardComponent implements OnDestroy, OnInit {
+export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
-  _stepDefinitions: NgWizardStepDef[];
-  get stepDefinitions(): NgWizardStepDef[] {
-    return this._stepDefinitions;
-  }
-
-  @Input('steps')
-  set stepDefinitions(stepDefinitions: NgWizardStepDef[]) {
-    this._stepDefinitions = stepDefinitions;
-  }
-
-  steps: NgWizardStep[];
-
+  @ContentChildren(NgWizardStep)
+  public steps: QueryList<NgWizardStep>;
 
   _pConfig: NgWizardConfig;
   get pConfig(): NgWizardConfig {
@@ -45,7 +35,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   styles: {
     main?: string;
     step?: string;
-    page?: string;
     previousButton?: string;
     nextButton?: string;
     toolbarTop?: string;
@@ -66,7 +55,9 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   constructor(private ngService: NgWizardService) {
   }
 
-  ngOnInit() {
+  ngAfterContentInit() {
+    this._backupStepStates();
+
     this._init();
 
     // Set toolbar
@@ -112,11 +103,10 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _initSteps() {
-
-    this.steps = this.stepDefinitions.map((step, index) => <NgWizardStep>{
-      definition: merge({ state: STEP_STATE.normal }, step),
-      index: index,
-      status: STEP_STATUS.untouched,
+    this.steps.forEach((step, index) => {
+      step.index = index;
+      step.status = step.status || STEP_STATUS.untouched;
+      step.state = step.state || STEP_STATE.normal;
     });
 
     // Mark previous steps of the active step as done
@@ -125,11 +115,25 @@ export class NgWizardComponent implements OnDestroy, OnInit {
       && this.config.anchorSettings.markAllPreviousStepsAsDone) {
 
       this.steps.forEach(step => {
-        if (step.definition.state != STEP_STATE.disabled && step.definition.state != STEP_STATE.hidden) {
+        if (step.state != STEP_STATE.disabled && step.state != STEP_STATE.hidden) {
           step.status = step.index < this.config.selected ? STEP_STATUS.done : step.status;
         }
       });
     }
+  }
+
+  _backupStepStates() {
+    this.steps.forEach(step => {
+      step.initialStatus = step.status;
+      step.initialState = step.state;
+    });
+  }
+
+  _restoreStepStates() {
+    this.steps.forEach(step => {
+      step.status = step.initialStatus;
+      step.state = step.initialState;
+    });
   }
 
   // PRIVATE FUNCTIONS
@@ -149,9 +153,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     this.styles.toolbarTop = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
     this.styles.toolbarBottom = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
 
-    // Set content pages
-    this.styles.page = 'tab-pane step-content';
-
     // Set previous&next buttons 
     this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
     this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
@@ -168,7 +169,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _setEvents() {
-    //TODO: keyNavigation, backButtonSupport
+    //TODO: keyNavigation
     // Keyboard navigation event
     if (this.config.keyNavigation) {
       // $(document).keyup(function (e) {
@@ -180,7 +181,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   _getStepCssClass(selectedStep: NgWizardStep) {
     var stepClass = this.styles.step;
 
-    switch (selectedStep.definition.state) {
+    switch (selectedStep.state) {
       case STEP_STATE.disabled:
         stepClass += ' disabled';
         break;
@@ -202,16 +203,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     }
 
     return stepClass;
-  }
-
-  _getPageCssClass(selectedStep: NgWizardStep) {
-    var pageClass = this.styles.page;
-
-    if (selectedStep.index == this.current_index) {
-      pageClass += ' active';
-    }
-
-    return pageClass;
   }
 
   _showSelectedStep(event: Event, selectedStep: NgWizardStep) {
@@ -244,8 +235,8 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     // Find the next not disabled & hidden step
     var filteredSteps = this.steps.filter(step => {
       return step.index > (this.current_index == null ? -1 : this.current_index)
-        && step.definition.state != STEP_STATE.disabled
-        && step.definition.state != STEP_STATE.hidden;
+        && step.state != STEP_STATE.disabled
+        && step.state != STEP_STATE.hidden;
     });
 
     if (filteredSteps.length == 0) {
@@ -267,8 +258,8 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     // Find the previous not disabled & hidden step
     var filteredSteps = this.steps.filter(step => {
       return step.index < (this.current_index == null && this.config.cycleSteps ? this.steps.length : this.current_index)
-        && step.definition.state != STEP_STATE.disabled
-        && step.definition.state != STEP_STATE.hidden;
+        && step.state != STEP_STATE.disabled
+        && step.state != STEP_STATE.hidden;
     });
 
     if (filteredSteps.length == 0) {
@@ -292,9 +283,9 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     if (index == this.current_index) {
       return;
     }
-    var selectedStep = this.steps[index];
+    var selectedStep = this.steps.toArray()[index];
     // If it is a disabled or hidden step, skip
-    if (selectedStep.definition.state == STEP_STATE.disabled || selectedStep.definition.state == STEP_STATE.hidden) {
+    if (selectedStep.state == STEP_STATE.disabled || selectedStep.state == STEP_STATE.hidden) {
       return;
     }
 
@@ -303,20 +294,6 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   }
 
   _loadStepContent(selectedStep: NgWizardStep) {
-    var contentURL = selectedStep.definition.contentURL && selectedStep.definition.contentURL.length > 0 ? selectedStep.definition.contentURL : this.config.contentURL;
-
-    if (contentURL && contentURL.length > 0 && (!selectedStep.definition.content || selectedStep.definition.content.length == 0 || !this.config.contentCache)) {
-      this._showLoader();
-      // TODO: Get ajax content and then show step
-      this._transitPage(selectedStep);
-      this._hideLoader();
-    } else {
-      // Show step
-      this._transitPage(selectedStep);
-    }
-  }
-
-  _transitPage(selectedStep: NgWizardStep) {
     // Get the direction of step navigation
     var stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
     var stepPosition = (selectedStep.index == 0) ? 'first' : (selectedStep.index == this.steps.length - 1 ? 'final' : 'middle');
@@ -405,6 +382,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
     }
   }
 
+  /*
   _showLoader() {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme + ' ng-wizard-loading';
   }
@@ -412,6 +390,7 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   _hideLoader() {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
   }
+  */
 
   // PUBLIC FUNCTIONS
   _setTheme(theme: THEME) {
@@ -429,6 +408,8 @@ export class NgWizardComponent implements OnDestroy, OnInit {
   _reset() {
     // Reset all elements and classes
     this.current_index = null;
+    this.currentStep = null;
+    this._restoreStepStates();
     this._init();
 
     // Trigger "reseted" event

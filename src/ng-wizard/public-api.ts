@@ -15,6 +15,5 @@ export {
     ToolbarButton,
     AnchorSettings,
     NgWizardConfig,
-    NgWizardStepDef,
     StepChangedArgs
 } from './lib/utils/interfaces'

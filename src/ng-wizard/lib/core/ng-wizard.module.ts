@@ -2,13 +2,14 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { NgWizardComponent } from './wizard/ng-wizard.component';
+import { NgWizardStepComponent } from './wizard-step/ng-wizard-step.component';
 import { NG_WIZARD_CONFIG_TOKEN } from './ng-wizard-config.token';
 import { NgWizardConfig } from '../utils/interfaces';
 
 @NgModule({
-  declarations: [NgWizardComponent],
   imports: [BrowserModule],
-  exports: [NgWizardComponent]
+  declarations: [NgWizardComponent, NgWizardStepComponent],
+  exports: [NgWizardComponent, NgWizardStepComponent]
 })
 export class NgWizardModule {
   /**

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgWizardStepDef, NgWizardConfig, StepChangedArgs, NgWizardService, THEME, STEP_STATE } from '../../ng-wizard/public-api'; //'ng-wizard'
+import { NgWizardConfig, StepChangedArgs, NgWizardService, THEME, STEP_STATE } from '../../ng-wizard/public-api'; //'ng-wizard'
 
 @Component({
   selector: 'app-root',
@@ -8,40 +8,11 @@ import { NgWizardStepDef, NgWizardConfig, StepChangedArgs, NgWizardService, THEM
 })
 export class AppComponent implements OnInit {
 
-  steps: NgWizardStepDef[] = [
-    {
-      title: 'Step 1',
-      description: 'Step 1 description',
-      content: 'Step 1 Content',
-    },
-    {
-      title: 'Step 2',
-      description: 'Step 2 description',
-      content: 'Step 2 Content',
-      state: STEP_STATE.error,
-    },
-    {
-      title: 'Step 3',
-      description: 'Step 3 description',
-      content: 'Step 3 Content',
-      state: STEP_STATE.disabled,
-    },
-    {
-      title: 'Step 4',
-      description: 'Step 4 description',
-      content: 'Step 4 Content',
-      state: STEP_STATE.hidden,
-    },
-    {
-      title: 'Step 5',
-      description: 'Step 5 description',
-      content: 'Step 5 Content',
-    },
-  ];
+  stepStates = { normal: STEP_STATE.normal, disabled: STEP_STATE.disabled, error: STEP_STATE.error, hidden: STEP_STATE.hidden };
 
   config: NgWizardConfig = {
     selected: 0,
-    theme: THEME.arrows,
+    theme: THEME.default,
     toolbarSettings: {
       toolbarExtraButtons: [
         { text: 'Finish', class: 'btn btn-info', event: () => { alert("Finished!!!"); } },

@@ -4,11 +4,7 @@ import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION/*, TRANSITION_EFFECT*/, THEME
 export const DEFAULT_CONFIG: NgWizardConfig = {
     selected: 0,
     keyNavigation: true,
-    // autoAdjustHeight: true,
     cycleSteps: false,
-    // backButtonSupport: true,
-    // useURLhash: true,
-    showStepURLhash: true,
     lang: {
         next: 'Next',
         previous: 'Previous'
@@ -28,10 +24,5 @@ export const DEFAULT_CONFIG: NgWizardConfig = {
         removeDoneStepOnNavigateBack: false,
         enableAnchorOnDoneStep: true
     },
-    contentURL: null,
-    contentCache: true,
-    // ajaxSettings: {},
     theme: THEME.default,
-    // transitionEffect: TRANSITION_EFFECT.none,
-    // transitionSpeed: '400'
 };
