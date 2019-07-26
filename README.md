@@ -3,10 +3,9 @@ Angular Wizard - Stepper
 
 
 - **`Development is not yet completed.`**
-
-- **`Angular version of `[techlab/SmartWizard - jQuery Smart Wizard 4](https://github.com/techlab/smartwizard)**
-
 - **`Demo: `[ng-wizard - Demo](https://ng-wizard.stackblitz.io)**
+- **`Angular version of `[jQuery Smart Wizard](https://github.com/techlab/smartwizard)**
+
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
