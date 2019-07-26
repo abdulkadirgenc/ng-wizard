@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { NgWizardComponent } from './ng-wizard.component';
+import { NgWizardComponent } from './wizard/ng-wizard.component';
 import { NG_WIZARD_CONFIG_TOKEN } from './ng-wizard-config.token';
 import { NgWizardConfig } from '../utils/interfaces';
 
