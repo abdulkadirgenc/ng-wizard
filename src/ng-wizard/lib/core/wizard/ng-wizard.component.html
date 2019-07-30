@@ -1,12 +1,10 @@
-<div>
-    <div id="ngwizard" [ngClass]="styles.main">
-        <ul class="nav nav-tabs step-anchor">
-            <li *ngFor="let step of steps; let i = index" [ngClass]="_getStepCssClass(step)">
-                <a href="#step-{{ i }}" (click)="_showSelectedStep($event, step)"
-                    class="nav-link">{{ step.title }}<br /><small>{{ step.description }}</small></a>
-            </li>
-        </ul>
-    </div>
+<div id="ngwizard" [ngClass]="styles.main">
+    <ul class="nav nav-tabs step-anchor">
+        <li *ngFor="let step of steps; let i = index" [ngClass]="_getStepCssClass(step)">
+            <a href="#step-{{ i }}" (click)="_showSelectedStep($event, step)"
+                class="nav-link">{{ step.title }}<br /><small>{{ step.description }}</small></a>
+        </li>
+    </ul>
 
     <div *ngIf="showToolbarTop" [ngClass]="styles.toolbarTop">
         <div class="btn-group mr-2 ng-wizard-btn-group" role="group">

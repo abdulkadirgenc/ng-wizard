@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
 
   config: NgWizardConfig = {
     selected: 0,
-    theme: THEME.default,
+    theme: THEME.arrows,
     toolbarSettings: {
       toolbarExtraButtons: [
         { text: 'Finish', class: 'btn btn-info', event: () => { alert("Finished!!!"); } },

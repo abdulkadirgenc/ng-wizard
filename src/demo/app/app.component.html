@@ -7,6 +7,7 @@
                     &gt;&gt;</button>
             </div>
         </ng-wizard-step>
+
         <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'">
             <div>
                 <button type="button" (click)="showPreviousStep($event)" class="btn btn-secondary ng-wizard-btn-prev">
@@ -16,7 +17,8 @@
                     &gt;&gt;</button>
             </div>
         </ng-wizard-step>
-        <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'" [state]="stepStates.disabled">
+
+        <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'">
             <div>
                 <button type="button" (click)="showPreviousStep($event)" class="btn btn-secondary ng-wizard-btn-prev">
                     &lt;&lt;</button>
@@ -25,7 +27,8 @@
                     &gt;&gt;</button>
             </div>
         </ng-wizard-step>
-        <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'" [state]="stepStates.hidden">
+
+        <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
             <div>
                 <button type="button" (click)="showPreviousStep($event)" class="btn btn-secondary ng-wizard-btn-prev">
                     &lt;&lt;</button>
@@ -34,23 +37,17 @@
                     &gt;&gt;</button>
             </div>
         </ng-wizard-step>
-        <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="stepStates.error">
+
+        <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'">
             <div>
                 <button type="button" (click)="showPreviousStep($event)" class="btn btn-secondary ng-wizard-btn-prev">
                     &lt;&lt;</button>
                 <span>Step 5 content</span>
-                <button type="button" (click)="showNextStep($event)" class="btn btn-secondary ng-wizard-btn-next">
-                    &gt;&gt;</button>
             </div>
         </ng-wizard-step>
-        <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'">
-            <div>
-                <button type="button" (click)="showPreviousStep($event)" class="btn btn-secondary ng-wizard-btn-prev">
-                    &lt;&lt;</button>
-                <span>Step 6 content</span>
-            </div>
-        </ng-wizard-step>
+
     </ng-wizard>
+
     <div class="btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-start">
         <div class="btn-group mr-2 ng-wizard-btn-group">
             <button type="button" (click)="showPreviousStep($event)"
