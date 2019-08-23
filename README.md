@@ -15,25 +15,124 @@ ng-wizard is a stepper / wizard component that you can use in your Angular appli
 + [Bootstrap 4](https://getbootstrap.com/docs/4.3/getting-started/download/)
 
 
-## Installation
+## Getting started
+Install **ng-wizard** through npm:
 ```
-$ npm install ng-wizard
+$ npm install --save ng-wizard
 ```
 
-## How to use the wizard
+Include **bootstrap** CSS file (skip if already imported):
+```css
+@import '~bootstrap/dist/css/bootstrap.min.css';
+```
 
-````html
+Include **ng-wizard** CSS files:
+```css
+/* Mandatory */
+@import '~ng-wizard/themes/ng_wizard.min.css';
 
-````
+/* Optional */
+/* If a theme other than default is used, the css file for that theme is required. */
+@import '~ng-wizard/themes/ng_wizard_theme_arrows.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_circles.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_dots.min.css';
+```
+
+Import the **ng-wizard module** into your apps module:
+```typescript
+import { NgModule } from '@angular/core';
+
+import { NgWizardModule, NgWizardConfig, THEME } from 'ng-wizard';
+
+const ngWizardConfig: NgWizardConfig = {
+  theme: THEME.default
+};
+
+@NgModule({
+  imports: [
+    NgWizardModule.forRoot(ngWizardConfig)
+  ]
+})
+export class AppModule { }
+```
+
+Add an **ng-wizard** component to the html template of your component:
+```html
+<ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
+
+    <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'">
+        <span>Step 1 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'">
+        <span>Step 2 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'">
+        <span>Step 3 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
+        <span>Step 4 content</span>
+    </ng-wizard-step>
+
+</ng-wizard>
+```
 
 
+`[config]` is an optional parameter for **ng-wizard** component.
 
+If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file:
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { NgWizardConfig, THEME, StepChangedArgs, NgWizardService } from 'ng-wizard';
 
+@Component({
+  templateUrl: 'app.component.html'
+})
+export class AppComponent implements OnInit {
 
+  config: NgWizardConfig = {
+    selected: 0,
+    theme: THEME.arrows,
+    toolbarSettings: {
+      toolbarExtraButtons: [
+        { text: 'Finish', class: 'btn btn-info', event: () => { alert("Finished!!!"); } }
+    }
+  };
 
+  constructor(private ngWizardService: NgWizardService) {
+  }
 
+  ngOnInit() {
+  }
 
+  showPreviousStep(event?: Event) {
+    this.ngWizardService.previous();
+  }
 
+  showNextStep(event?: Event) {
+    this.ngWizardService.next();
+  }
 
+  resetWizard(event?: Event) {
+    this.ngWizardService.reset();
+  }
+
+  setTheme(theme: THEME) {
+    this.ngWizardService.theme(theme);
+  }
+
+  stepChanged(args: StepChangedArgs) {
+    console.log(args.step);
+  }
+}
+
+```
+
+## Configuration
+```
+...
+```
 ## License
 [MIT License](https://github.com/abdulkadirgenc/ng-wizard/blob/master/LICENSE)
