@@ -18,7 +18,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
   _pConfig: NgWizardConfig;
   get pConfig(): NgWizardConfig {
-    return this._pConfig;
+    return this._pConfig || {};
   }
 
   @Input('config')
