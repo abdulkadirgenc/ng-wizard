@@ -1,35 +1,39 @@
 # ng-wizard
-Angular Wizard - Stepper
+ng-wizard is a stepper / wizard component that you can use in your Angular applications. You can access the sample demo project **[by clicking here](https://ng-wizard.stackblitz.io)**.
+
+## Screenshots
+
+![Default](/Screenshots/1_default.png)
+
+![Arrows](/Screenshots/2_arrows.png)
+
+![Circles](/Screenshots/3_circles.png)
+
+![Dots](/Screenshots/4_dots.png)
+
+## Dependencies
++ [Bootstrap 4](https://getbootstrap.com/docs/4.3/getting-started/download/)
 
 
-- **`Development is not yet completed.`**
-- **`Demo: `[ng-wizard - Demo](https://ng-wizard.stackblitz.io)**
-- **`Angular version of `[jQuery Smart Wizard](https://github.com/techlab/smartwizard)**
+## Installation
+```
+$ npm install ng-wizard
+```
+
+## How to use the wizard
+
+````html
+
+````
 
 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## License
+[MIT License](https://github.com/abdulkadirgenc/ng-wizard/blob/master/LICENSE)
