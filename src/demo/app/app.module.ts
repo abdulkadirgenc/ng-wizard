@@ -1,27 +1,12 @@
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { NgWizardModule, NgWizardConfig, THEME } from '../../ng-wizard/public-api'; //'ng-wizard'
-
+import { BrowserModule } from '@angular/platform-browser'; // moved ng-wizard from here as now being lazy loaded
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-const ngWizardConfig: NgWizardConfig = {
-  theme: THEME.default
-};
-
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    FormsModule,
-    BrowserModule,
-    AppRoutingModule,
-    NgWizardModule.forRoot(ngWizardConfig)
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
