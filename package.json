@@ -4,9 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o --port=4201",
-    "build": "ng build ng-wizard && npm run copy-themes && npm run copy-files",
-    "copy-themes": "mkdir dist\\ng-wizard\\themes && copy src\\ng-wizard\\themes\\*.css dist\\ng-wizard\\themes",
-    "copy-files": "copy README.md dist\\ng-wizard && copy LICENSE dist\\ng-wizard",
+    "build": "ng build --aot",
+    "lib:build": "rimraf dist && ng build ng-wizard",
+    "lib:themes": "mkdir dist\\ng-wizard\\themes && copy src\\ng-wizard\\themes\\*.css dist\\ng-wizard\\themes",
+    "lib:files": "copy README.md dist\\ng-wizard && copy LICENSE dist\\ng-wizard",
+    "lib:pack": "cd dist/ng-wizard && npm pack",
+    "lib": "npm run lib:build && npm run lib:themes && npm run lib:files && npm run lib:pack",
     "test": "ng test ng-wizard",
     "lint": "ng lint ng-wizard",
     "e2e": "ng e2e"

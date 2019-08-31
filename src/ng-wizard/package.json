@@ -1,7 +1,7 @@
 {
   "name": "ng-wizard-component",
   "description": "Angular ng-wizard - Angular wizard | stepper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/sc0tt5/ng-wizard.git"
