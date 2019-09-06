@@ -1,13 +1,13 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
-import { NgWizardComponent } from './wizard/ng-wizard.component';
-import { NgWizardStepComponent } from './wizard-step/ng-wizard-step.component';
-import { NG_WIZARD_CONFIG_TOKEN } from './ng-wizard-config.token';
 import { NgWizardConfig } from '../utils/interfaces';
+import { NG_WIZARD_CONFIG_TOKEN } from './ng-wizard-config.token';
+import { NgWizardStepComponent } from './wizard-step/ng-wizard-step.component';
+import { NgWizardComponent } from './wizard/ng-wizard.component';
 
 @NgModule({
-  imports: [BrowserModule],
+  imports: [CommonModule],
   declarations: [NgWizardComponent, NgWizardStepComponent],
   exports: [NgWizardComponent, NgWizardStepComponent]
 })
