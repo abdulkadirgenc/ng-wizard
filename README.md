@@ -134,5 +134,9 @@ export class AppComponent implements OnInit {
 ```
 ...
 ```
+
+## Thanks
+This component was created by rewriting the [jQuery Smart Wizard 4](https://github.com/techlab/SmartWizard) in Angular. Thanks to [TechLaboratory](http://www.techlaboratory.net/) for **.Css** files.
+
 ## License
 [MIT License](https://github.com/abdulkadirgenc/ng-wizard/blob/master/LICENSE)
