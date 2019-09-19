@@ -42,6 +42,8 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   } = {};
 
   showToolbarTop: boolean = false;
+  showPreviousButton: boolean = false;
+  showNextButton: boolean = false;
   showToolbarBottom: boolean = false;
   showExtraButtons: boolean = false;
   current_index: number = null; // Active step index
@@ -164,6 +166,9 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
     this.showToolbarBottom = this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.bottom ||
       this.config.toolbarSettings.toolbarPosition == TOOLBAR_POSITION.both;
+
+    this.showPreviousButton = this.config.toolbarSettings.showPreviousButton;
+    this.showNextButton = this.config.toolbarSettings.showNextButton;
 
     this.showExtraButtons = this.config.toolbarSettings.toolbarExtraButtons && this.config.toolbarSettings.toolbarExtraButtons.length > 0;
   }

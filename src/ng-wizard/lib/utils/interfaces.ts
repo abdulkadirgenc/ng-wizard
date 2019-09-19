@@ -7,11 +7,11 @@ export interface Language {
 }
 
 export interface ToolbarSettings {
-    toolbarPosition?: TOOLBAR_POSITION;
-    toolbarButtonPosition?: TOOLBAR_BUTTON_POSITION;
-    showNextButton?: boolean;
-    showPreviousButton?: boolean;
-    toolbarExtraButtons?: ToolbarButton[];
+    toolbarPosition?: TOOLBAR_POSITION; // none, top, bottom, both
+    toolbarButtonPosition?: TOOLBAR_BUTTON_POSITION; // start, end
+    showNextButton?: boolean; // show/hide a Next button
+    showPreviousButton?: boolean; // show/hide a Previous button
+    toolbarExtraButtons?: ToolbarButton[]; // Extra buttons to show on toolbar, array of input/buttons elements
 }
 
 export interface ToolbarButton {
@@ -21,12 +21,12 @@ export interface ToolbarButton {
 }
 
 export interface AnchorSettings {
-    anchorClickable?: boolean;
-    enableAllAnchors?: boolean;
-    markDoneStep?: boolean;
-    markAllPreviousStepsAsDone?: boolean;
-    removeDoneStepOnNavigateBack?: boolean;
-    enableAnchorOnDoneStep?: boolean;
+    anchorClickable?: boolean; // Enable/Disable anchor navigation
+    enableAllAnchors?: boolean; // Activates all anchors clickable all times
+    markDoneStep?: boolean; // Add done css
+    markAllPreviousStepsAsDone?: boolean; // When a step selected, all previous steps are marked done
+    removeDoneStepOnNavigateBack?: boolean; // While navigate back done step after active step will be cleared
+    enableAnchorOnDoneStep?: boolean; // Enable/Disable the done steps navigation
 }
 
 export interface NgWizardConfig {

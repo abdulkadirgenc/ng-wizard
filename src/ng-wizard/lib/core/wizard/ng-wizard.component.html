@@ -8,9 +8,9 @@
 
     <div *ngIf="showToolbarTop" [ngClass]="styles.toolbarTop">
         <div class="btn-group mr-2 ng-wizard-btn-group" role="group">
-            <button [ngClass]="styles.previousButton" type="button"
+            <button *ngIf="showPreviousButton" [ngClass]="styles.previousButton" type="button"
                 (click)="_showPreviousStep($event)">{{ config.lang.previous }}</button>
-            <button [ngClass]="styles.nextButton" type="button"
+            <button *ngIf="showNextButton" [ngClass]="styles.nextButton" type="button"
                 (click)="_showNextStep($event)">{{ config.lang.next }}</button>
         </div>
 
@@ -26,9 +26,9 @@
 
     <div *ngIf="showToolbarBottom" [ngClass]="styles.toolbarBottom">
         <div class="btn-group mr-2 ng-wizard-btn-group" role="group">
-            <button [ngClass]="styles.previousButton" type="button"
+            <button *ngIf="showPreviousButton" [ngClass]="styles.previousButton" type="button"
                 (click)="_showPreviousStep($event)">{{ config.lang.previous }}</button>
-            <button [ngClass]="styles.nextButton" type="button"
+            <button *ngIf="showNextButton" [ngClass]="styles.nextButton" type="button"
                 (click)="_showNextStep($event)">{{ config.lang.next }}</button>
         </div>
 
