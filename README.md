@@ -131,9 +131,38 @@ export class AppComponent implements OnInit {
 ```
 
 ## Configuration
-```
-...
-```
+#### `NgWizardConfig` properties:
+
+| Name            | Type                                 | Default Value                                                                                                                                                                 | Description                                                                  |
+| --------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| selected        | `number`                             | `0`                                                                                                                                                                           | Initial selected step                                                        |
+| keyNavigation   | `boolean`                            | `true`                                                                                                                                                                        | Enable/Disable keyboard navigation (left and right keys are used if enabled) |
+| cycleSteps      | `boolean`                            | `false`                                                                                                                                                                       | Allows to cycle the navigation of steps                                      |
+| lang            | `{ next: string, previous: string }` | `{ next: 'Next', previous: 'Previous' }`                                                                                                                                      | Language variables for buttons                                               |
+| toolbarSettings | `ToolbarSettings`                    | `{ toolbarPosition: TOOLBAR_POSITION.bottom, toolbarButtonPosition: TOOLBAR_BUTTON_POSITION.end, showNextButton: true, showPreviousButton: true, toolbarExtraButtons: [] }`   | Toolbar settings                                                             |
+| anchorSettings  | `AnchorSettings`                     | `{ anchorClickable: true, enableAllAnchors: false, markDoneStep: true, markAllPreviousStepsAsDone: true, removeDoneStepOnNavigateBack: false, enableAnchorOnDoneStep: true }` | Anchor settings                                                              |
+| theme           | `THEME`                              | `THEME.default`                                                                                                                                                               | Wizard theme (default, arrows, circles, dots)                                |
+
+#### `ToolbarSettings` properties:
+
+| Name                  | Type                      | Default Value                 | Description                                                       |
+| --------------------- | ------------------------- | ----------------------------- | ----------------------------------------------------------------- |
+| toolbarPosition       | `TOOLBAR_POSITION`        | `TOOLBAR_POSITION.bottom`     | Toolbar position (none, top, bottom, both)                        |
+| toolbarButtonPosition | `TOOLBAR_BUTTON_POSITION` | `TOOLBAR_BUTTON_POSITION.end` | Toolbar button position (start, end)                              |
+| showNextButton        | `boolean`                 | `true`                        | show/hide Next button                                             |
+| showPreviousButton    | `boolean`                 | `true`                        | show/hide Previous button                                         |
+| toolbarExtraButtons   | `ToolbarButton[]`         | `[]`                          | Extra buttons to show on toolbar, array of input/buttons elements |
+
+#### `AnchorSettings` properties:
+
+| Name                         | Type        | Default Value | Description                                                     |
+| ---------------------------- | ----------- | ------------- | --------------------------------------------------------------- |
+| anchorClickable              | `boolean`   | `true`        | Enable/Disable anchor navigation                                |
+| enableAllAnchors             | `boolean`   | `false`       | Activates all anchors clickable all times                       |
+| markDoneStep                 | `boolean`   | `true`        | Add done css                                                    |
+| markAllPreviousStepsAsDone   | `boolean`   | `true`        | When a step selected, all previous steps are marked done        |
+| removeDoneStepOnNavigateBack | `boolean`   | `false`       | While navigate back done step after active step will be cleared |
+| enableAnchorOnDoneStep       | `boolean[]` | `true`        | Enable/Disable the done steps navigation                        |
 
 ## Thanks
 This component was created by rewriting the [jQuery Smart Wizard 4](https://github.com/techlab/SmartWizard) in Angular. Thanks to [TechLaboratory](http://www.techlaboratory.net/) for **.Css** files.
