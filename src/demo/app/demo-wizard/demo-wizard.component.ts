@@ -73,6 +73,11 @@ export class DemoWizardComponent implements OnInit {
 
   stepChanged(args: StepChangedArgs) {
     console.log(args.step);
-    this.stepChangedArgs = args;
+    args.step ? (<any>args.step).__ngContext__ = undefined : {};
+    args.previousStep ? (<any>args.previousStep).__ngContext__ = undefined : {};
+
+    setTimeout(() => {
+      this.stepChangedArgs = args;
+    }, 0);
   }
 }
