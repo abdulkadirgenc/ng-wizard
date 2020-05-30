@@ -16,7 +16,7 @@ export class NgWizardModule {
    * forRoot
    * @returns A module with its provider dependencies
    */
-  static forRoot(ngWizardConfig: NgWizardConfig): ModuleWithProviders {
+  static forRoot(ngWizardConfig: NgWizardConfig): ModuleWithProviders<NgWizardModule> {
     return {
       ngModule: NgWizardModule,
       providers: [

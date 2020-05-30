@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/demo",
             "index": "src/demo/index.html",
             "main": "src/demo/main.ts",
@@ -50,6 +51,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -142,6 +147,11 @@
           "options": {
             "tsConfig": "src/ng-wizard/tsconfig.lib.json",
             "project": "src/ng-wizard/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "src/ng-wizard/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -167,5 +177,8 @@
       }
     }
   },
-  "defaultProject": "demo"
+  "defaultProject": "demo",
+  "cli": {
+    "analytics": "e260d4c9-d537-419f-9df7-f7b9639a17f5"
+  }
 }
