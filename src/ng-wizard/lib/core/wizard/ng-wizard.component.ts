@@ -1,7 +1,7 @@
 import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { NgWizardService } from '../ng-wizard.service';
+import { NgWizardDataService } from '../ng-wizard-data.service';
 import { NgWizardConfig, NgWizardStep, ToolbarButton, StepChangedArgs } from '../../utils/interfaces';
 import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../../utils/enums';
 import { merge } from '../../utils/functions';
@@ -54,7 +54,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   showPreviousStepWatcher: Subscription;
   setThemeWatcher: Subscription;
 
-  constructor(private ngService: NgWizardService) {
+  constructor(private ngWizardDataService: NgWizardDataService) {
   }
 
   ngAfterContentInit() {
@@ -68,22 +68,22 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     // Assign plugin events
     this._setEvents();
 
-    this.resetWizardWatcher = this.ngService.resetWizard$
+    this.resetWizardWatcher = this.ngWizardDataService.resetWizard$
       .subscribe(() => {
         this._reset();
       });
 
-    this.showNextStepWatcher = this.ngService.showNextStep$
+    this.showNextStepWatcher = this.ngWizardDataService.showNextStep$
       .subscribe(() => {
         this._showNextStep();
       });
 
-    this.showPreviousStepWatcher = this.ngService.showPreviousStep$
+    this.showPreviousStepWatcher = this.ngWizardDataService.showPreviousStep$
       .subscribe(() => {
         this._showPreviousStep();
       });
 
-    this.setThemeWatcher = this.ngService.setTheme$
+    this.setThemeWatcher = this.ngWizardDataService.setTheme$
       .subscribe(theme => {
         this._setTheme(theme);
       });
@@ -91,7 +91,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
   _init() {
     // set config
-    var defaultConfig = this.ngService.getDefaultConfig();
+    var defaultConfig = this.ngWizardDataService.getDefaultConfig();
     this.config = merge(defaultConfig, this.pConfig);
 
     // set step states
@@ -309,12 +309,14 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     this._setButtons(selectedStep.index);
 
     // Trigger "stepChanged" event
-    this.stepChanged.emit({
+    const args = <StepChangedArgs>{
       step: selectedStep,
       previousStep: this.currentStep,
       direction: stepDirection,
       position: stepPosition
-    });
+    };
+    this.stepChanged.emit(args);
+    this.ngWizardDataService.stepChanged(args);
 
     // Update the current index
     this.current_index = selectedStep.index;

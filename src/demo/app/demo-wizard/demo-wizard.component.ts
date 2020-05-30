@@ -52,6 +52,11 @@ export class DemoWizardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedtheme = this.config.theme;
+
+    this.ngWizardService.stepChanged()
+      .subscribe({
+        next: (args) => this.setStepChangedArgs(args)
+      });
   }
 
   showPreviousStep(event?: Event) {
@@ -73,6 +78,11 @@ export class DemoWizardComponent implements OnInit {
 
   stepChanged(args: StepChangedArgs) {
     console.log(args.step);
+
+    // this.setStepChangedArgs(args);
+  }
+
+  private setStepChangedArgs(args: StepChangedArgs) {
     args.step ? (<any>args.step).__ngContext__ = undefined : {};
     args.previousStep ? (<any>args.previousStep).__ngContext__ = undefined : {};
 
