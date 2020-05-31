@@ -15,22 +15,22 @@ export class NgWizardService {
   }
 
   reset() {
-    this.ngWizardDataService.resetWizard.next();
+    this.ngWizardDataService.resetWizard();
   }
 
   next() {
-    this.ngWizardDataService.showNextStep.next();
+    this.ngWizardDataService.showNextStep();
   }
 
   previous() {
-    this.ngWizardDataService.showPreviousStep.next();
+    this.ngWizardDataService.showPreviousStep();
   }
 
   theme(theme: THEME) {
-    this.ngWizardDataService.setTheme.next(theme);
+    this.ngWizardDataService.setTheme(theme);
   }
 
   stepChanged(): Observable<StepChangedArgs> {
-    return this.ngWizardDataService.stepChangedArgs.asObservable()
+    return this.ngWizardDataService.stepChangedArgs$;
   }
 }

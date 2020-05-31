@@ -63,8 +63,8 @@ export abstract class NgWizardStep {
 }
 
 export interface StepChangedArgs {
-    step: NgWizardStep,
-    previousStep: NgWizardStep,
-    direction: string,
-    position: string
+    step: NgWizardStep;
+    previousStep: NgWizardStep;
+    direction: string;
+    position: string;
 }

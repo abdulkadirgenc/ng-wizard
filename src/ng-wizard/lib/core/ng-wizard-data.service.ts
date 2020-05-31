@@ -11,43 +11,61 @@ import { merge } from '../utils/functions';
   providedIn: 'root'
 })
 export class NgWizardDataService {
-  resetWizard$: Observable<any>; //For internal use only.
-  showNextStep$: Observable<any>; //For internal use only.
-  showPreviousStep$: Observable<any>; //For internal use only.
-  setTheme$: Observable<THEME>; //For internal use only.
+  resetWizard$: Observable<any>;
+  showNextStep$: Observable<any>;
+  showPreviousStep$: Observable<any>;
+  setTheme$: Observable<THEME>;
+  stepChangedArgs$: Observable<StepChangedArgs>;
 
-  resetWizard: Subject<any>;
-  showNextStep: Subject<any>;
-  showPreviousStep: Subject<any>;
-  setTheme: Subject<THEME>;
-  stepChangedArgs: Subject<StepChangedArgs>;
-  defaultConfig: NgWizardConfig;
+  private _resetWizard: Subject<any>;
+  private _showNextStep: Subject<any>;
+  private _showPreviousStep: Subject<any>;
+  private _setTheme: Subject<THEME>;
+  private _stepChangedArgs: Subject<StepChangedArgs>;
+  private _defaultConfig: NgWizardConfig;
 
   constructor(@Optional() @Inject(NG_WIZARD_CONFIG_TOKEN) private config: NgWizardConfig) {
-    this.defaultConfig = { ...DEFAULT_CONFIG };
+    this._defaultConfig = { ...DEFAULT_CONFIG };
     if (this.config) {
-      this.defaultConfig = merge(this.defaultConfig, this.config);
+      this._defaultConfig = merge(this._defaultConfig, this.config);
     }
 
     // Observable sources
-    this.resetWizard = new Subject<any>();
-    this.showNextStep = new Subject<any>();
-    this.showPreviousStep = new Subject<any>();
-    this.setTheme = new Subject<THEME>();
-    this.stepChangedArgs = new Subject<StepChangedArgs>();
+    this._resetWizard = new Subject<any>();
+    this._showNextStep = new Subject<any>();
+    this._showPreviousStep = new Subject<any>();
+    this._setTheme = new Subject<THEME>();
+    this._stepChangedArgs = new Subject<StepChangedArgs>();
 
     // Observable streams
-    this.resetWizard$ = this.resetWizard.asObservable();
-    this.showNextStep$ = this.showNextStep.asObservable();
-    this.showPreviousStep$ = this.showPreviousStep.asObservable();
-    this.setTheme$ = this.setTheme.asObservable();
+    this.resetWizard$ = this._resetWizard.asObservable();
+    this.showNextStep$ = this._showNextStep.asObservable();
+    this.showPreviousStep$ = this._showPreviousStep.asObservable();
+    this.setTheme$ = this._setTheme.asObservable();
+    this.stepChangedArgs$ = this._stepChangedArgs.asObservable();
   }
 
   getDefaultConfig(): NgWizardConfig {
-    return { ...this.defaultConfig };
+    return { ...this._defaultConfig };
+  }
+
+  resetWizard() {
+    this._resetWizard.next();
+  }
+
+  showNextStep() {
+    this._showNextStep.next();
+  }
+
+  showPreviousStep() {
+    this._showPreviousStep.next();
+  }
+
+  setTheme(theme: THEME) {
+    this._setTheme.next(theme);
   }
 
   stepChanged(args: StepChangedArgs) {
-    this.stepChangedArgs.next(args);
+    this._stepChangedArgs.next(args);
   }
 }
