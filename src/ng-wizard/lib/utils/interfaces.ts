@@ -1,5 +1,5 @@
 import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS } from './enums';
-import { Input, HostBinding, Directive } from '@angular/core';
+import { Input, HostBinding, Directive, TemplateRef } from '@angular/core';
 
 export interface Language {
     next?: string;
@@ -37,6 +37,7 @@ export interface NgWizardConfig {
     toolbarSettings?: ToolbarSettings;
     anchorSettings?: AnchorSettings;
     theme?: THEME; // theme for the wizard, related css need to include for other than default theme
+    customHeaderTemplate?: TemplateRef<any>;
 }
 
 @Directive()

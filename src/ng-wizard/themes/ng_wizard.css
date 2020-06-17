@@ -57,12 +57,12 @@
     border-top-color: #ddd !important;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li {
     position: relative;
     margin-right: 2px;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li > a, .ng-wizard-theme-default > ul.step-anchor > li > a:hover {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a, .ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:hover {
     border: none !important;
     color: #bbb;
     text-decoration: none;
@@ -72,13 +72,13 @@
     cursor: not-allowed;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.clickable > a:hover {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.clickable > a:hover {
     color: #4285F4 !important;
     background: transparent !important;
     cursor: pointer;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li > a::after {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a::after {
     content: "";
     background: #4285F4;
     height: 2px;
@@ -93,41 +93,41 @@
     transform: scale(0);
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.active > a {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.active > a {
     border: none !important;
     color: #4285F4 !important;
     background: transparent !important;
     cursor: pointer;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.active > a::after {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.active > a::after {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.done > a {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.done > a {
     border: none !important;
     color: #000 !important;
     background: transparent !important;
     cursor: pointer;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.done > a::after {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.done > a::after {
     background: #5cb85c;
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.danger > a {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.danger > a {
     border: none !important;
     color: #d9534f !important;
     /* background: #d9534f !important; */
     cursor: pointer;
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.danger > a::after {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.danger > a::after {
     background: #d9534f;
     border-left-color: #f8d7da;
     -webkit-transform: scale(1);
@@ -135,7 +135,7 @@
     transform: scale(1);
 }
 
-.ng-wizard-theme-default > ul.step-anchor > li.disabled > a, .ng-wizard-theme-default > ul.step-anchor > li.disabled > a:hover {
+.ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.disabled > a, .ng-wizard-theme-default > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.disabled > a:hover {
     color: #eee !important;
     cursor: not-allowed;
 }

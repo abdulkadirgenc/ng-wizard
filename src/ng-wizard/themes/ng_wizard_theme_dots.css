@@ -29,14 +29,14 @@
     border-bottom-color: #ddd !important;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor {
     position: relative;
     background: #fff;
     border: 0px solid #ccc !important;
     list-style: none;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor:before {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor:before {
     content: " ";
     position: absolute;
     top: 70px;
@@ -49,11 +49,11 @@
     z-index: 95;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li {
     border: none;
 }
 /* Anchors styles */
-.ng-wizard-theme-dots > ul.step-anchor > li > a {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a {
     position: relative;
     text-align: center;
     font-weight: bold;
@@ -66,7 +66,7 @@
     display: block;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li > a:before {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:before {
     content: ' ';
     position: absolute;
     bottom: 2px;
@@ -83,7 +83,7 @@
     z-index: 98;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li > a:after {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:after {
     content: ' ';
     position: relative;
     left: 43%;
@@ -97,59 +97,59 @@
     z-index: 99;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li > a:hover {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:hover {
     color: #ccc;
     background: transparent;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li > a:focus {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:focus {
     color: #ccc;
     border: none;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.clickable > a:hover {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.clickable > a:hover {
     color: #999;
 }
 /* Active anchors */
-.ng-wizard-theme-dots > ul.step-anchor > li.active > a {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.active > a {
     color: #5bc0de;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.active > a:hover {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.active > a:hover {
     border: none;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.active > a:after {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.active > a:after {
     background: #5bc0de;
 }
 /* Done anchors */
-.ng-wizard-theme-dots > ul.step-anchor > li.done > a {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.done > a {
     color: #5cb85c;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.done > a:after {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.done > a:after {
     background: #5cb85c;
 }
 /* Danger anchors */
-.ng-wizard-theme-dots > ul.step-anchor > li.danger > a {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.danger > a {
     color: #d9534f;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.danger > a:after {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.danger > a:after {
     background: #d9534f;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.disabled > a, .ng-wizard-theme-dots > ul.step-anchor > li.disabled > a:hover {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.disabled > a, .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.disabled > a:hover {
     color: #eee !important;
 }
 
-.ng-wizard-theme-dots > ul.step-anchor > li.disabled > a:after {
+.ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li.disabled > a:after {
     background: #eee;
 }
 
 /* Responsive CSS */
 @media screen and (max-width: 768px) {
-    .ng-wizard-theme-dots > ul.step-anchor:before {
+    .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor:before {
         top: 0;
         bottom: 0;
         left: 10px;
@@ -160,26 +160,26 @@
         margin-right: 10px;
     }
 
-    .ng-wizard-theme-dots > ul.step-anchor > li {
+    .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li {
         margin-left: 20px;
         display: block;
         clear: both;
     }
 
-    .ng-wizard-theme-dots > ul.step-anchor > li > a {
+    .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a {
         text-align: left;
         margin-left: 0;
         display: block;
     }
 
-    .ng-wizard-theme-dots > ul.step-anchor > li > a:before {
+    .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:before {
         top: 5px;
         left: -23px;
         margin-right: 10px;
         display: block;
     }
 
-    .ng-wizard-theme-dots > ul.step-anchor > li > a:after {
+    .ng-wizard-theme-dots > .ng-wizard-header > ng-wizard-nav > ul.step-anchor > li > a:after {
         top: -38px;
         left: -31px;
         margin-right: 10px;

@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs step-anchor">
+  <li *ngFor="let step of steps; let i = index" [ngClass]="_getStepCssClass(step)">
+      <a href="#step-{{ i }}" (click)="_showSelectedStep($event, step)"
+          class="nav-link">{{ step.title }}<br /><small>{{ step.description }}</small></a>
+  </li>
+</ul>
