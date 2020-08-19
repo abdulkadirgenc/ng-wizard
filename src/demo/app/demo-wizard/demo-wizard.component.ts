@@ -44,14 +44,17 @@ export class DemoWizardComponent implements OnInit {
   };
 
   stepChangedArgs: StepChangedArgs;
-  selectedtheme: THEME;
+  selectedTheme: THEME;
   themes = [THEME.default, THEME.arrows, THEME.circles, THEME.dots];
+  selectedStepIndex: number;
+  stepIndexes = [0, 1, 2, 3, 4, 5, 6];
 
   constructor(private ngWizardService: NgWizardService) {
   }
 
   ngOnInit() {
-    this.selectedtheme = this.config.theme;
+    this.selectedTheme = this.config.theme;
+    this.selectedStepIndex = this.config.selected;
 
     this.ngWizardService.stepChanged()
       .subscribe({
@@ -68,12 +71,16 @@ export class DemoWizardComponent implements OnInit {
   }
 
   resetWizard(event?: Event) {
-    this.selectedtheme = this.config.theme;
+    this.selectedTheme = this.config.theme;
     this.ngWizardService.reset();
   }
 
   themeSelected() {
-    this.ngWizardService.theme(this.selectedtheme);
+    this.ngWizardService.theme(this.selectedTheme);
+  }
+
+  stepIndexSelected() {
+    this.ngWizardService.show(this.selectedStepIndex);
   }
 
   stepChanged(args: StepChangedArgs) {

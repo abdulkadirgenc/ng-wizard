@@ -14,12 +14,14 @@ export class NgWizardDataService {
   resetWizard$: Observable<any>;
   showNextStep$: Observable<any>;
   showPreviousStep$: Observable<any>;
+  showStep$: Observable<number>;
   setTheme$: Observable<THEME>;
   stepChangedArgs$: Observable<StepChangedArgs>;
 
   private _resetWizard: Subject<any>;
   private _showNextStep: Subject<any>;
   private _showPreviousStep: Subject<any>;
+  private _showStep: Subject<number>;
   private _setTheme: Subject<THEME>;
   private _stepChangedArgs: Subject<StepChangedArgs>;
   private _defaultConfig: NgWizardConfig;
@@ -34,6 +36,7 @@ export class NgWizardDataService {
     this._resetWizard = new Subject<any>();
     this._showNextStep = new Subject<any>();
     this._showPreviousStep = new Subject<any>();
+    this._showStep = new Subject<any>();
     this._setTheme = new Subject<THEME>();
     this._stepChangedArgs = new Subject<StepChangedArgs>();
 
@@ -41,6 +44,7 @@ export class NgWizardDataService {
     this.resetWizard$ = this._resetWizard.asObservable();
     this.showNextStep$ = this._showNextStep.asObservable();
     this.showPreviousStep$ = this._showPreviousStep.asObservable();
+    this.showStep$ = this._showStep.asObservable();
     this.setTheme$ = this._setTheme.asObservable();
     this.stepChangedArgs$ = this._stepChangedArgs.asObservable();
   }
@@ -59,6 +63,10 @@ export class NgWizardDataService {
 
   showPreviousStep() {
     this._showPreviousStep.next();
+  }
+
+  showStep(index: number) {
+    this._showStep.next(index);
   }
 
   setTheme(theme: THEME) {

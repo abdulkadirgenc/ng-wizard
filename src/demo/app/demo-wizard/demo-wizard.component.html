@@ -109,8 +109,11 @@
           Next
         </button>
         <button type="button" (click)="resetWizard($event)" class="btn btn-danger">Reset</button>
-        <select [(ngModel)]="selectedtheme" (change)="themeSelected()">
+        <select [(ngModel)]="selectedTheme" (change)="themeSelected()">
           <option *ngFor="let theme of themes" [ngValue]="theme">{{ theme }}</option>
+        </select>
+        <select [(ngModel)]="selectedStepIndex" (change)="stepIndexSelected()">
+          <option *ngFor="let stepIndex of stepIndexes" [ngValue]="stepIndex">{{ 'Step - ' + (stepIndex + 1) }}</option>
         </select>
       </div>
     </div>

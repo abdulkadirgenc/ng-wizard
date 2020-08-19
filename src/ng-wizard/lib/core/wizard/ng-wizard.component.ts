@@ -52,6 +52,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   resetWizardWatcher: Subscription;
   showNextStepWatcher: Subscription;
   showPreviousStepWatcher: Subscription;
+  showStepWatcher: Subscription;
   setThemeWatcher: Subscription;
 
   constructor(private ngWizardDataService: NgWizardDataService) {
@@ -81,6 +82,11 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     this.showPreviousStepWatcher = this.ngWizardDataService.showPreviousStep$
       .subscribe(() => {
         this._showPreviousStep();
+      });
+
+    this.showStepWatcher = this.ngWizardDataService.showStep$
+      .subscribe((index) => {
+        this._showStep(index);
       });
 
     this.setThemeWatcher = this.ngWizardDataService.setTheme$
@@ -434,6 +440,10 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
     if (this.showPreviousStepWatcher) {
       this.showPreviousStepWatcher.unsubscribe();
+    }
+
+    if (this.showStepWatcher) {
+      this.showStepWatcher.unsubscribe();
     }
 
     if (this.setThemeWatcher) {

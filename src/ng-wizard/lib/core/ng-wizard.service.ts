@@ -26,6 +26,10 @@ export class NgWizardService {
     this.ngWizardDataService.showPreviousStep();
   }
 
+  show(index: number) {
+    this.ngWizardDataService.showStep(index);
+  }
+
   theme(theme: THEME) {
     this.ngWizardDataService.setTheme(theme);
   }
