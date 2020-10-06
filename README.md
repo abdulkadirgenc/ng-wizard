@@ -98,6 +98,7 @@ export class AppComponent implements OnInit {
     toolbarSettings: {
       toolbarExtraButtons: [
         { text: 'Finish', class: 'btn btn-info', event: () => { alert("Finished!!!"); } }
+      ],
     }
   };
 
