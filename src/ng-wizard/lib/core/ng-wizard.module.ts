@@ -5,11 +5,13 @@ import { NgWizardConfig } from '../utils/interfaces';
 import { NG_WIZARD_CONFIG_TOKEN } from './ng-wizard-config.token';
 import { NgWizardStepComponent } from './wizard-step/ng-wizard-step.component';
 import { NgWizardComponent } from './wizard/ng-wizard.component';
+import { NgWizardNavComponent } from './wizard-nav/ng-wizard-nav.component';
+import { NgWizardHeaderComponent } from './wizard-header/ng-wizard-header.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [NgWizardComponent, NgWizardStepComponent],
-  exports: [NgWizardComponent, NgWizardStepComponent]
+  declarations: [NgWizardComponent, NgWizardStepComponent, NgWizardNavComponent, NgWizardHeaderComponent],
+  exports: [NgWizardComponent, NgWizardStepComponent, NgWizardNavComponent, NgWizardHeaderComponent]
 })
 export class NgWizardModule {
   /**

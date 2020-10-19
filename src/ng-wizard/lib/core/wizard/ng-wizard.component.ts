@@ -1,4 +1,4 @@
-import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList } from '@angular/core';
+import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgWizardDataService } from '../ng-wizard-data.service';
@@ -26,7 +26,18 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     this._pConfig = config;
   }
 
+  _pHeaderTpl: TemplateRef<any> | null;
+  get pHeaderTpl(): TemplateRef<any> | null {
+    return this._pHeaderTpl || null;
+  }
+
+  @Input('headerTpl')
+  set pHeaderTpl(headerTpl: TemplateRef<any> | null) {
+    this._pHeaderTpl = headerTpl;
+  }
+
   config: NgWizardConfig;
+  headerTpl: TemplateRef<any> | null;
 
   @Output() stepChanged = new EventEmitter<StepChangedArgs>();
   @Output() themeChanged = new EventEmitter<THEME>();
@@ -161,7 +172,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     this.styles.toolbarTop = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-top justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
     this.styles.toolbarBottom = 'btn-toolbar ng-wizard-toolbar ng-wizard-toolbar-bottom justify-content-' + this.config.toolbarSettings.toolbarButtonPosition;
 
-    // Set previous&next buttons 
+    // Set previous&next buttons
     this.styles.previousButton = 'btn btn-secondary ng-wizard-btn-prev';
     this.styles.nextButton = 'btn btn-secondary ng-wizard-btn-next';
   }
@@ -186,56 +197,6 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
       // $(document).keyup(function (e) {
       //   mi._keyNav(e);
       // });
-    }
-  }
-
-  _getStepCssClass(selectedStep: NgWizardStep) {
-    var stepClass = this.styles.step;
-
-    switch (selectedStep.state) {
-      case STEP_STATE.disabled:
-        stepClass += ' disabled';
-        break;
-      case STEP_STATE.error:
-        stepClass += ' danger';
-        break;
-      case STEP_STATE.hidden:
-        stepClass += ' hidden';
-        break;
-    }
-
-    switch (selectedStep.status) {
-      case STEP_STATUS.done:
-        stepClass += ' done';
-        break;
-      case STEP_STATUS.active:
-        stepClass += ' active';
-        break;
-    }
-
-    return stepClass;
-  }
-
-  _showSelectedStep(event: Event, selectedStep: NgWizardStep) {
-    event.preventDefault();
-
-    if (!this.config.anchorSettings.anchorClickable) {
-      return;
-    }
-
-    if (!this.config.anchorSettings.enableAnchorOnDoneStep && selectedStep.status == STEP_STATUS.done) {
-      return true;
-    }
-
-    if (selectedStep.index != this.current_index) {
-      if (this.config.anchorSettings.enableAllAnchors && this.config.anchorSettings.anchorClickable) {
-        this._showStep(selectedStep.index);
-      }
-      else {
-        if (selectedStep.status == STEP_STATUS.done) {
-          this._showStep(selectedStep.index);
-        }
-      }
     }
   }
 
