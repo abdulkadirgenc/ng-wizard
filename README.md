@@ -64,7 +64,7 @@ Add an **ng-wizard** component to the html template of your component:
         <span>Step 1 content</span>
     </ng-wizard-step>
 
-    <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'">
+    <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="'disabled'">
         <span>Step 2 content</span>
     </ng-wizard-step>
 
@@ -76,6 +76,17 @@ Add an **ng-wizard** component to the html template of your component:
         <span>Step 4 content</span>
     </ng-wizard-step>
 
+    <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="'hidden'">
+      <span>Step 5 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="'error'">
+      <span>Step 6 content</span>
+    </ng-wizard-step>
+
+    <ng-wizard-step [title]="'Step 7'" [description]="'Step 7 description'">
+      <span>Step 7 content</span>
+    </ng-wizard-step>
 </ng-wizard>
 ```
 

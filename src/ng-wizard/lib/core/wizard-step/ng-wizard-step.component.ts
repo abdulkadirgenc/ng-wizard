@@ -1,4 +1,5 @@
 import { Component, forwardRef } from '@angular/core';
+import { STEP_STATE } from '../../utils/enums';
 import { NgWizardStep } from '../../utils/interfaces';
 
 @Component({
@@ -10,4 +11,7 @@ import { NgWizardStep } from '../../utils/interfaces';
   ]
 })
 export class NgWizardStepComponent extends NgWizardStep {
+  get isHidden(): boolean {
+    return this.state == STEP_STATE.hidden;
+  }
 }
