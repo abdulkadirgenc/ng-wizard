@@ -1,5 +1,5 @@
 import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 import { NgWizardDataService } from '../ng-wizard-data.service';
 import { NgWizardConfig, NgWizardStep, ToolbarButton, StepChangedArgs } from '../../utils/interfaces';
@@ -69,35 +69,16 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     // Assign plugin events
     this._setEvents();
 
-    this.resetWizardWatcher = this.ngWizardDataService.resetWizard$
-      .subscribe(() => {
-        this._reset();
-      });
-
-    this.showNextStepWatcher = this.ngWizardDataService.showNextStep$
-      .subscribe(() => {
-        this._showNextStep();
-      });
-
-    this.showPreviousStepWatcher = this.ngWizardDataService.showPreviousStep$
-      .subscribe(() => {
-        this._showPreviousStep();
-      });
-
-    this.showStepWatcher = this.ngWizardDataService.showStep$
-      .subscribe((index) => {
-        this._showStep(index);
-      });
-
-    this.setThemeWatcher = this.ngWizardDataService.setTheme$
-      .subscribe(theme => {
-        this._setTheme(theme);
-      });
+    this.resetWizardWatcher = this.ngWizardDataService.resetWizard$.subscribe(() => this._reset());
+    this.showNextStepWatcher = this.ngWizardDataService.showNextStep$.subscribe(() => this._showNextStep());
+    this.showPreviousStepWatcher = this.ngWizardDataService.showPreviousStep$.subscribe(() => this._showPreviousStep());
+    this.showStepWatcher = this.ngWizardDataService.showStep$.subscribe(index => this._showStep(index));
+    this.setThemeWatcher = this.ngWizardDataService.setTheme$.subscribe(theme => this._setTheme(theme));
   }
 
   _init() {
     // set config
-    var defaultConfig = this.ngWizardDataService.getDefaultConfig();
+    let defaultConfig = this.ngWizardDataService.getDefaultConfig();
     this.config = merge(defaultConfig, this.pConfig);
 
     // set step states
@@ -190,7 +171,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   }
 
   _getStepCssClass(selectedStep: NgWizardStep) {
-    var stepClass = this.styles.step;
+    let stepClass = this.styles.step;
 
     switch (selectedStep.state) {
       case STEP_STATE.disabled:
@@ -244,7 +225,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
       event.preventDefault();
     }
     // Find the next not disabled & hidden step
-    var filteredSteps = this.steps.filter(step => {
+    let filteredSteps = this.steps.filter(step => {
       return step.index > (this.current_index == null ? -1 : this.current_index)
         && step.state != STEP_STATE.disabled
         && step.state != STEP_STATE.hidden;
@@ -267,7 +248,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
       event.preventDefault();
     }
     // Find the previous not disabled & hidden step
-    var filteredSteps = this.steps.filter(step => {
+    let filteredSteps = this.steps.filter(step => {
       return step.index < (this.current_index == null && this.config.cycleSteps ? this.steps.length : this.current_index)
         && step.state != STEP_STATE.disabled
         && step.state != STEP_STATE.hidden;
@@ -290,24 +271,39 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     if (index >= this.steps.length || index < 0) {
       return;
     }
+
     // If current step is requested again, skip
     if (index == this.current_index) {
       return;
     }
-    var selectedStep = this.steps.toArray()[index];
+
+    let selectedStep = this.steps.toArray()[index];
+
     // If it is a disabled or hidden step, skip
     if (selectedStep.state == STEP_STATE.disabled || selectedStep.state == STEP_STATE.hidden) {
       return;
     }
 
-    // Load step content
-    this._loadStepContent(selectedStep);
+    let stepValidator = of(true);
+
+    this._showLoader();
+
+    stepValidator
+      .subscribe({
+        next: isValid => {
+          if (isValid) {
+            // Load step content
+            this._loadStepContent(selectedStep);
+          }
+        },
+        complete: () => this._hideLoader()
+      });
   }
 
   _loadStepContent(selectedStep: NgWizardStep) {
     // Get the direction of step navigation
-    var stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
-    var stepPosition = (selectedStep.index == 0) ? 'first' : (selectedStep.index == this.steps.length - 1 ? 'final' : 'middle');
+    let stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
+    let stepPosition = (selectedStep.index == 0) ? 'first' : (selectedStep.index == this.steps.length - 1 ? 'final' : 'middle');
 
     // Update controls
     this._setAnchor(selectedStep);
@@ -395,7 +391,6 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     }
   }
 
-  /*
   _showLoader() {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme + ' ng-wizard-loading';
   }
@@ -403,7 +398,6 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   _hideLoader() {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
   }
-  */
 
   // PUBLIC FUNCTIONS
   _setTheme(theme: THEME) {

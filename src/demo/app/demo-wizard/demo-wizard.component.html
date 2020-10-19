@@ -7,7 +7,7 @@
         <span>Step 1 content</span>
       </ng-wizard-step>
 
-      <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="'disabled'">
+      <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="stepStates.disabled">
         <span>Step 2 content</span>
       </ng-wizard-step>
 
@@ -92,11 +92,11 @@
         <span>Step 4 content</span>
       </ng-wizard-step>
 
-      <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="'hidden'">
+      <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="stepStates.hidden">
         <span>Step 5 content</span>
       </ng-wizard-step>
 
-      <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="'error'">
+      <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="stepStates.error">
         <span>Step 6 content</span>
       </ng-wizard-step>
 
