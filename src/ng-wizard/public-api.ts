@@ -17,3 +17,5 @@ export {
     NgWizardConfig,
     StepChangedArgs
 } from './lib/utils/interfaces'
+export { NgWizardComponent } from './lib/core/wizard/ng-wizard.component';
+export { NgWizardStepComponent } from './lib/core/wizard-step/ng-wizard-step.component';
