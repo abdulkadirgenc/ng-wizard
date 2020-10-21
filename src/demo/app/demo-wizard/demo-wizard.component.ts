@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { of } from 'rxjs';
-import { StepValidationArgs } from 'src/ng-wizard/lib/utils/interfaces';
 import {
   NgWizardConfig,
   NgWizardService,
   StepChangedArgs,
+  StepValidationArgs,
   STEP_STATE,
   THEME
 } from '../../../ng-wizard/public-api'; // 'ng-wizard'

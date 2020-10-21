@@ -98,7 +98,8 @@ Add an **ng-wizard** component to the html template of your component:
 If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file.
 ```typescript
 import { Component, OnInit } from '@angular/core';
-import { NgWizardConfig, THEME, StepChangedArgs, NgWizardService } from 'ng-wizard';
+import { of } from 'rxjs';
+import { NgWizardConfig, NgWizardService, StepChangedArgs, StepValidationArgs, STEP_STATE, THEME } from 'ng-wizard';
 
 @Component({
   templateUrl: 'app.component.html'
