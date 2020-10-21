@@ -3,7 +3,8 @@
   <div class="form-group">
 
     <ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
-      <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'">
+      <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'" [canEnter]="isValidTypeBoolean"
+        [canExit]="isValidFunctionReturnsBoolean.bind(this)">
         <span>Step 1 content</span>
       </ng-wizard-step>
 
@@ -11,14 +12,8 @@
         <span>Step 2 content</span>
       </ng-wizard-step>
 
-      <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'">
-        <span>Step 3 content</span>
-        <br />
-        <div class="row">
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Search" />
-          </div>
-        </div>
+      <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'"
+        [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
         <br />
         <div class="row">
           <div class="col-lg-12">
@@ -44,44 +39,8 @@
                         <span class="badge badge-success">Active</span>
                       </td>
                     </tr>
-                    <tr>
-                      <td>Avram Tarasios</td>
-                      <td>2012/02/01</td>
-                      <td>Staff</td>
-                      <td>
-                        <span class="badge badge-danger">Banned</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Quintin Ed</td>
-                      <td>2012/02/01</td>
-                      <td>Admin</td>
-                      <td>
-                        <span class="badge badge-secondary">Inactive</span>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
-                <ul class="pagination">
-                  <li class="page-item">
-                    <a class="page-link" href="#">Prev</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">4</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

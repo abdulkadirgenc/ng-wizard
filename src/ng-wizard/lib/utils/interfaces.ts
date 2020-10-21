@@ -1,5 +1,6 @@
-import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS } from './enums';
+import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS, STEP_DIRECTIN, STEP_POSITION } from './enums';
 import { Input, HostBinding, Directive } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export interface Language {
     next?: string;
@@ -53,6 +54,13 @@ export abstract class NgWizardStep {
     state?: STEP_STATE;
     initialState?: STEP_STATE;
 
+    @Input()
+    public canEnter: boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>);
+
+    @Input()
+    public canExit: boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>);
+
+
     status?: STEP_STATUS;
     initialStatus?: STEP_STATUS;
 
@@ -62,9 +70,15 @@ export abstract class NgWizardStep {
     }
 }
 
+export interface StepValidationArgs {
+    direction: STEP_DIRECTIN;
+    fromStep: NgWizardStep;
+    toStep: NgWizardStep;
+}
+
 export interface StepChangedArgs {
     step: NgWizardStep;
     previousStep: NgWizardStep;
-    direction: string;
-    position: string;
+    direction: STEP_DIRECTIN;
+    position: STEP_POSITION;
 }

@@ -35,3 +35,14 @@ export enum STEP_STATUS {
     done = 'done',
     active = 'active'
 }
+
+export enum STEP_DIRECTIN {
+    forward = 'forward',
+    backward = 'backward'
+}
+
+export enum STEP_POSITION {
+    first = 'first',
+    final = 'final',
+    middle = 'middle'
+}

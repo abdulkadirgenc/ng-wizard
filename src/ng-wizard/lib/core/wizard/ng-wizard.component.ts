@@ -1,9 +1,9 @@
 import { Component, AfterContentInit, Input, OnDestroy, EventEmitter, Output, ContentChildren, QueryList } from '@angular/core';
-import { of, Subscription } from 'rxjs';
+import { isObservable, observable, Observable, of, Subscription } from 'rxjs';
 
 import { NgWizardDataService } from '../ng-wizard-data.service';
-import { NgWizardConfig, NgWizardStep, ToolbarButton, StepChangedArgs } from '../../utils/interfaces';
-import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME } from '../../utils/enums';
+import { NgWizardConfig, NgWizardStep, ToolbarButton, StepChangedArgs, StepValidationArgs } from '../../utils/interfaces';
+import { TOOLBAR_POSITION, STEP_STATE, STEP_STATUS, THEME, STEP_DIRECTIN, STEP_POSITION } from '../../utils/enums';
 import { merge } from '../../utils/functions';
 
 @Component({
@@ -46,7 +46,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
   showNextButton: boolean = false;
   showToolbarBottom: boolean = false;
   showExtraButtons: boolean = false;
-  current_index: number = null; // Active step index
+  currentStepIndex: number = null; // Active step index
   currentStep: NgWizardStep; // Active step
 
   resetWizardWatcher: Subscription;
@@ -208,7 +208,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
       return true;
     }
 
-    if (selectedStep.index != this.current_index) {
+    if (selectedStep.index != this.currentStepIndex) {
       if (this.config.anchorSettings.enableAllAnchors && this.config.anchorSettings.anchorClickable) {
         this._showStep(selectedStep.index);
       }
@@ -226,7 +226,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     }
     // Find the next not disabled & hidden step
     let filteredSteps = this.steps.filter(step => {
-      return step.index > (this.current_index == null ? -1 : this.current_index)
+      return step.index > (this.currentStepIndex == null ? -1 : this.currentStepIndex)
         && step.state != STEP_STATE.disabled
         && step.state != STEP_STATE.hidden;
     });
@@ -249,7 +249,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     }
     // Find the previous not disabled & hidden step
     let filteredSteps = this.steps.filter(step => {
-      return step.index < (this.current_index == null && this.config.cycleSteps ? this.steps.length : this.current_index)
+      return step.index < (this.currentStepIndex == null && this.config.cycleSteps ? this.steps.length : this.currentStepIndex)
         && step.state != STEP_STATE.disabled
         && step.state != STEP_STATE.hidden;
     });
@@ -266,45 +266,67 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     }
   }
 
-  _showStep(index: number) {
+  _showStep(selectedStepIndex: number) {
     // If step not found, skip
-    if (index >= this.steps.length || index < 0) {
+    if (selectedStepIndex >= this.steps.length || selectedStepIndex < 0) {
       return;
     }
 
     // If current step is requested again, skip
-    if (index == this.current_index) {
+    if (selectedStepIndex == this.currentStepIndex) {
       return;
     }
 
-    let selectedStep = this.steps.toArray()[index];
+    let selectedStep = this.steps.toArray()[selectedStepIndex];
 
     // If it is a disabled or hidden step, skip
     if (selectedStep.state == STEP_STATE.disabled || selectedStep.state == STEP_STATE.hidden) {
       return;
     }
 
-    let stepValidator = of(true);
-
     this._showLoader();
 
-    stepValidator
-      .subscribe({
-        next: isValid => {
-          if (isValid) {
-            // Load step content
-            this._loadStepContent(selectedStep);
-          }
-        },
-        complete: () => this._hideLoader()
-      });
+    return this._isStepChangeValid(selectedStep, this.currentStep && this.currentStep.canExit).toPromise()
+      .then(isValid => {
+        if (isValid) {
+          return this._isStepChangeValid(selectedStep, selectedStep.canEnter).toPromise();
+        }
+
+        return of(isValid).toPromise();
+      })
+      .then(isValid => {
+        if (isValid) {
+          // Load step content
+          this._loadStepContent(selectedStep);
+        }
+      })
+      .finally(() => this._hideLoader());
+  }
+
+  private _isStepChangeValid(selectedStep, condition: boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>)): Observable<boolean> {
+    if (typeof condition === typeof true) {
+      return of(<boolean>condition);
+    }
+
+    else if (condition instanceof Function) {
+      let direction = this._getStepDirection(selectedStep.index);
+      let result = condition({ direction: direction, fromStep: this.currentStep, toStep: selectedStep });
+
+      if (isObservable<boolean>(result)) {
+        return result;
+      }
+      else if (typeof result === typeof true) {
+        return of(<boolean>result);
+      }
+      else {
+        return of(false);
+      }
+    }
+
+    return of(true);
   }
 
   _loadStepContent(selectedStep: NgWizardStep) {
-    // Get the direction of step navigation
-    let stepDirection = (this.current_index != null && this.current_index != selectedStep.index) ? (this.current_index < selectedStep.index ? "forward" : "backward") : '';
-    let stepPosition = (selectedStep.index == 0) ? 'first' : (selectedStep.index == this.steps.length - 1 ? 'final' : 'middle');
-
     // Update controls
     this._setAnchor(selectedStep);
     // Set the buttons based on the step
@@ -314,14 +336,14 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     const args = <StepChangedArgs>{
       step: selectedStep,
       previousStep: this.currentStep,
-      direction: stepDirection,
-      position: stepPosition
+      direction: this._getStepDirection(selectedStep.index),
+      position: this._getStepPosition(selectedStep.index)
     };
     this.stepChanged.emit(args);
     this.ngWizardDataService.stepChanged(args);
 
     // Update the current index
-    this.current_index = selectedStep.index;
+    this.currentStepIndex = selectedStep.index;
     this.currentStep = selectedStep;
   }
 
@@ -399,6 +421,15 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     this.styles.main = 'ng-wizard-main ng-wizard-theme-' + this.config.theme;
   }
 
+  _getStepDirection(selectedStepIndex: number): STEP_DIRECTIN {
+    return (this.currentStepIndex != null && this.currentStepIndex != selectedStepIndex) ?
+      (this.currentStepIndex < selectedStepIndex ? STEP_DIRECTIN.forward : STEP_DIRECTIN.backward) : null;
+  }
+
+  _getStepPosition(selectedStepIndex: number): STEP_POSITION {
+    return (selectedStepIndex == 0) ? STEP_POSITION.first : (selectedStepIndex == this.steps.length - 1 ? STEP_POSITION.final : STEP_POSITION.middle);
+  }
+
   // PUBLIC FUNCTIONS
   _setTheme(theme: THEME) {
     if (this.config.theme == theme) {
@@ -414,7 +445,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
   _reset() {
     // Reset all elements and classes
-    this.current_index = null;
+    this.currentStepIndex = null;
     this.currentStep = null;
     this._restoreStepStates();
     this._init();

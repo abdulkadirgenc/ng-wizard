@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { of } from 'rxjs';
+import { StepValidationArgs } from 'src/ng-wizard/lib/utils/interfaces';
 import {
   NgWizardConfig,
   NgWizardService,
@@ -87,6 +89,16 @@ export class DemoWizardComponent implements OnInit {
     console.log(args.step);
 
     // this.setStepChangedArgs(args);
+  }
+
+  isValidTypeBoolean: boolean = true;
+
+  isValidFunctionReturnsBoolean(args: StepValidationArgs) {
+    return true;
+  }
+
+  isValidFunctionReturnsObservable(args: StepValidationArgs) {
+    return of(true);
   }
 
   private setStepChangedArgs(args: StepChangedArgs) {
