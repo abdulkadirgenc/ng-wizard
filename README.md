@@ -95,7 +95,7 @@ Add an **ng-wizard** component to the html template of your component:
 
 `[config]` is an optional parameter for **ng-wizard** component.
 
-If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file:
+If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file.
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { NgWizardConfig, THEME, StepChangedArgs, NgWizardService } from 'ng-wizard';
@@ -161,6 +161,16 @@ export class AppComponent implements OnInit {
 ```
 
 ## Configuration
+#### `NgWizardStep` parameters:
+
+| Name        | Type                                                                                                      | Default Value       | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------- |
+| title       | `string`                                                                                                  |                     | Step title                                                                   |
+| description | `string`                                                                                                  |                     | Step description                                                             |
+| state       | `STEP_STATE`                                                                                              | `STEP_STATE.normal` | Step State (normal, disabled, error, hidden)                                 |
+| canExit     | `boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>)` |                     | Validation for transition from step                                          |
+| canEnter    | `boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>)` |                     | Validation for transition to step                                            |
+
 #### `NgWizardConfig` properties:
 
 | Name            | Type                                 | Default Value                                                                                                                                                                 | Description                                                                  |
