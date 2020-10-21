@@ -60,7 +60,8 @@ Add an **ng-wizard** component to the html template of your component:
 ```html
 <ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
   
-  <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'" [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+  <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'"
+    [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
     <span>Step 1 content</span>
   </ng-wizard-step>
   
@@ -68,7 +69,8 @@ Add an **ng-wizard** component to the html template of your component:
     <span>Step 2 content</span>
   </ng-wizard-step>
   
-  <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'" [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+  <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'"
+    [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
     <span>Step 3 content</span>
   </ng-wizard-step>
 
