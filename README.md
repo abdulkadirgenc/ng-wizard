@@ -59,34 +59,34 @@ export class AppModule { }
 Add an **ng-wizard** component to the html template of your component:
 ```html
 <ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
+  
+  <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'" [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+    <span>Step 1 content</span>
+  </ng-wizard-step>
+  
+  <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="stepStates.disabled">
+    <span>Step 2 content</span>
+  </ng-wizard-step>
+  
+  <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'" [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+    <span>Step 3 content</span>
+  </ng-wizard-step>
 
-    <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'">
-        <span>Step 1 content</span>
-    </ng-wizard-step>
+<ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
+    <span>Step 4 content</span>
+  </ng-wizard-step>
 
-    <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="'disabled'">
-        <span>Step 2 content</span>
-    </ng-wizard-step>
-
-    <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'">
-        <span>Step 3 content</span>
-    </ng-wizard-step>
-
-    <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
-        <span>Step 4 content</span>
-    </ng-wizard-step>
-
-    <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="'hidden'">
-      <span>Step 5 content</span>
-    </ng-wizard-step>
-
-    <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="'error'">
-      <span>Step 6 content</span>
-    </ng-wizard-step>
-
-    <ng-wizard-step [title]="'Step 7'" [description]="'Step 7 description'">
-      <span>Step 7 content</span>
-    </ng-wizard-step>
+  <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="stepStates.hidden">
+    <span>Step 5 content</span>
+  </ng-wizard-step>
+  
+  <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="stepStates.error">
+    <span>Step 6 content</span>
+  </ng-wizard-step>
+  
+  <ng-wizard-step [title]="'Step 7'" [description]="'Step 7 description'">
+    <span>Step 7 content</span>
+  </ng-wizard-step>
 </ng-wizard>
 ```
 
@@ -102,6 +102,12 @@ import { NgWizardConfig, THEME, StepChangedArgs, NgWizardService } from 'ng-wiza
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
+  stepStates = {
+    normal: STEP_STATE.normal,
+    disabled: STEP_STATE.disabled,
+    error: STEP_STATE.error,
+    hidden: STEP_STATE.hidden
+  };
 
   config: NgWizardConfig = {
     selected: 0,
@@ -137,6 +143,16 @@ export class AppComponent implements OnInit {
 
   stepChanged(args: StepChangedArgs) {
     console.log(args.step);
+  }
+
+  isValidTypeBoolean: boolean = true;
+
+  isValidFunctionReturnsBoolean(args: StepValidationArgs) {
+    return true;
+  }
+
+  isValidFunctionReturnsObservable(args: StepValidationArgs) {
+    return of(true);
   }
 }
 
