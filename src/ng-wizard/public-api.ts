@@ -7,7 +7,10 @@ export { NgWizardModule } from './lib/core/ng-wizard.module';
 export {
     TOOLBAR_POSITION,
     TOOLBAR_BUTTON_POSITION,
-    THEME, STEP_STATE
+    THEME,
+    STEP_STATE,
+    STEP_DIRECTIN,
+    STEP_POSITION,
 } from './lib/utils/enums'
 export {
     Language,
@@ -15,6 +18,8 @@ export {
     ToolbarButton,
     AnchorSettings,
     NgWizardConfig,
+    NgWizardStep,
+    StepValidationArgs,
     StepChangedArgs
 } from './lib/utils/interfaces'
 export { NgWizardComponent } from './lib/core/wizard/ng-wizard.component';
