@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./step-two.component.css']
 })
 export class StepTwoComponent implements OnInit {
-
-  constructor() { }
+  constructor(
+  ) {
+  }
 
   ngOnInit(): void {
   }
-
 }

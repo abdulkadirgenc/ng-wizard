@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
 import {
   NgWizardConfig,
   NgWizardService,
   StepChangedArgs,
-  StepValidationArgs,
   STEP_STATE,
   THEME
 } from '../../../ng-wizard/public-api'; // 'ng-wizard'
+
+import { DemoWizardService, StepDefinition } from './services/demo-wizard.service';
 
 @Component({
   selector: 'app-demo-wizard',
@@ -50,8 +50,13 @@ export class DemoWizardComponent implements OnInit {
   themes = [THEME.default, THEME.arrows, THEME.circles, THEME.dots];
   selectedStepIndex: number;
   stepIndexes = [0, 1, 2, 3, 4, 5, 6];
+  stepDefinitions: StepDefinition[] = [];
 
-  constructor(private ngWizardService: NgWizardService) {
+  constructor(
+    private ngWizardService: NgWizardService,
+    private demoWizardService: DemoWizardService,
+  ) {
+    this.stepDefinitions = demoWizardService.stepDefinitions;
   }
 
   ngOnInit() {
@@ -60,8 +65,14 @@ export class DemoWizardComponent implements OnInit {
 
     this.ngWizardService.stepChanged()
       .subscribe({
-        next: (args) => this.setStepChangedArgs(args)
+        next: (args) => {
+          console.log('catching step change - method 2');
+        }
       });
+  }
+
+  stepChanged(args: StepChangedArgs) {
+    console.log('catching step change - method 1');
   }
 
   showPreviousStep(event?: Event) {
@@ -83,30 +94,5 @@ export class DemoWizardComponent implements OnInit {
 
   stepIndexSelected() {
     this.ngWizardService.show(this.selectedStepIndex);
-  }
-
-  stepChanged(args: StepChangedArgs) {
-    console.log(args.step);
-
-    // this.setStepChangedArgs(args);
-  }
-
-  isValidTypeBoolean: boolean = true;
-
-  isValidFunctionReturnsBoolean(args: StepValidationArgs) {
-    return true;
-  }
-
-  isValidFunctionReturnsObservable(args: StepValidationArgs) {
-    return of(true);
-  }
-
-  private setStepChangedArgs(args: StepChangedArgs) {
-    args.step ? (<any>args.step).__ngContext__ = undefined : {};
-    args.previousStep ? (<any>args.previousStep).__ngContext__ = undefined : {};
-
-    setTimeout(() => {
-      this.stepChangedArgs = args;
-    }, 0);
   }
 }

@@ -1,28 +1,10 @@
 <br />
 <div class="container">
   <div class="form-group">
-
     <ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
-      <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'" [canEnter]="isValidTypeBoolean"
-        [canExit]="isValidFunctionReturnsBoolean.bind(this)">
-        <app-step-one></app-step-one>
-      </ng-wizard-step>
-
-      <ng-wizard-step [title]="'Step 2'" [description]="'Step 2 description'" [state]="stepStates.disabled">
-        <app-step-two></app-step-two>
-      </ng-wizard-step>
-
-      <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'"
-        [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
-        <app-step-three></app-step-three>
-      </ng-wizard-step>
-
-      <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
-        <app-step-four></app-step-four>
-      </ng-wizard-step>
-
-      <ng-wizard-step [title]="'Step 5'" [description]="'Step 5 description'" [state]="stepStates.hidden">
-        <app-step-five></app-step-five>
+      <ng-wizard-step *ngFor="let stepDefinition of stepDefinitions" [title]="stepDefinition.title"
+        [description]="stepDefinition.description" [state]="stepDefinition.state" [component]="stepDefinition.component"
+        [canEnter]="stepDefinition.canEnter" [canExit]="stepDefinition.canExit">
       </ng-wizard-step>
 
       <ng-wizard-step [title]="'Step 6'" [description]="'Step 6 description'" [state]="stepStates.error">
@@ -30,10 +12,9 @@
       </ng-wizard-step>
 
       <ng-wizard-step [title]="'Step 7'" [description]="'Step 7 description'">
-        <app-step-seven></app-step-seven>
+        <span>Step 7 content</span>
       </ng-wizard-step>
     </ng-wizard>
-
   </div>
 
   <div class="form-group">
@@ -55,11 +36,4 @@
       </div>
     </div>
   </div>
-
-  <div class="form-group">
-    <div>
-      <pre>{{ stepChangedArgs | json }}</pre>
-    </div>
-  </div>
-
 </div>
