@@ -1,13 +1,12 @@
-import { Component, Injectable, Type } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { StepValidationArgs, STEP_STATE } from '../../../../ng-wizard/public-api';
+import { NgWizardConfig, StepValidationArgs, STEP_STATE, THEME } from '../../../../ng-wizard/public-api';
 
 import { StepOneComponent } from '../steps/step-1/step-one.component';
 import { StepTwoComponent } from '../steps/step-2/step-two.component';
 import { StepThreeComponent } from '../steps/step-3/step-three.component';
 import { StepFourComponent } from '../steps/step-4/step-four.component';
 import { StepFiveComponent } from '../steps/step-5/step-five.component';
-import { StepSixComponent } from '../steps/step-6/step-six.component';
 
 @Injectable()
 export class DemoWizardService {
@@ -23,6 +22,20 @@ export class DemoWizardService {
   isValidFunctionReturnsObservable(args: StepValidationArgs) {
     return of(true);
   }
+
+  config: NgWizardConfig = {
+    selected: 0,
+    theme: THEME.arrows,
+    toolbarSettings: {
+      toolbarExtraButtons: [
+        {
+          text: 'Finish',
+          class: 'btn btn-info',
+          event: () => alert('Finished!!!')
+        },
+      ]
+    }
+  };
 
   stepDefinitions: StepDefinition[] = [
     {
