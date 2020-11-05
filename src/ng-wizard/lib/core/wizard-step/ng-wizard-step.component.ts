@@ -32,7 +32,7 @@ export class NgWizardStepComponent extends NgWizardStep implements OnInit {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.component);
 
     this.stepContent.viewContainerRef.clear();
-    this.stepContent.viewContainerRef.createComponent(componentFactory);
+    this.componentRef = this.stepContent.viewContainerRef.createComponent(componentFactory);
   }
 
   get isHidden(): boolean {

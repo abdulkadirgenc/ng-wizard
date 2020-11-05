@@ -1,5 +1,5 @@
 import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS, STEP_DIRECTIN, STEP_POSITION } from './enums';
-import { Input, HostBinding, Directive, Type, Component } from '@angular/core';
+import { Input, HostBinding, Directive, Type, ComponentRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Language {
@@ -56,6 +56,7 @@ export abstract class NgWizardStep {
 
     @Input()
     component: Type<any>;
+    componentRef: ComponentRef<any>;
 
     @Input()
     canEnter: boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>);
