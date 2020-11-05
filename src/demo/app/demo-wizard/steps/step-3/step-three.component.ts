@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-step-three',
@@ -11,5 +12,11 @@ export class StepThreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  validateEntryToStep = true;
+
+  validateExitFromStep() {
+    return of(true);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, Type } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { isObservable, Observable } from 'rxjs';
 import { NgWizardConfig, StepValidationArgs, STEP_STATE, THEME } from '../../../../ng-wizard/public-api';
 
 import { StepOneComponent } from '../steps/step-1/step-one.component';
@@ -11,16 +11,6 @@ import { StepFiveComponent } from '../steps/step-5/step-five.component';
 @Injectable()
 export class DemoWizardService {
   constructor() {
-  }
-
-  isValidTypeBoolean: boolean = true;
-
-  isValidFunctionReturnsBoolean(args: StepValidationArgs) {
-    return true;
-  }
-
-  isValidFunctionReturnsObservable(args: StepValidationArgs) {
-    return of(true);
   }
 
   config: NgWizardConfig = {
@@ -42,8 +32,8 @@ export class DemoWizardService {
       title: 'Step 1',
       description: 'Step 1 description',
       component: StepOneComponent,
-      canEnter: this.isValidTypeBoolean,
-      canExit: this.isValidFunctionReturnsBoolean.bind(this),
+      canEnter: this.validateStep.bind(this, 'entry'),
+      canExit: this.validateStep.bind(this, 'exit'),
     },
     {
       title: 'Step 2',
@@ -55,8 +45,8 @@ export class DemoWizardService {
       title: 'Step 3',
       description: 'Step 3 description',
       component: StepThreeComponent,
-      canEnter: this.isValidFunctionReturnsObservable.bind(this),
-      canExit: this.isValidFunctionReturnsBoolean.bind(this),
+      canEnter: this.validateStep.bind(this, 'entry'),
+      canExit: this.validateStep.bind(this, 'exit'),
     },
     {
       title: 'Step 4',
@@ -70,6 +60,34 @@ export class DemoWizardService {
       component: StepFiveComponent,
     },
   ];
+
+  private validateStep(type: string, args: StepValidationArgs) {
+    let step = type == 'entry' ? args.toStep : args.fromStep;
+    let stepSpecificValidateMethod;
+
+    if (step && step.componentRef) {
+      stepSpecificValidateMethod = type == 'entry' ? step.componentRef.instance.validateEntryToStep : step.componentRef.instance.validateExitFromStep;
+    }
+
+    if (stepSpecificValidateMethod) {
+      if (typeof stepSpecificValidateMethod === typeof true) {
+        return <boolean>stepSpecificValidateMethod;
+      }
+      else if (stepSpecificValidateMethod instanceof Function) {
+        stepSpecificValidateMethod = stepSpecificValidateMethod.bind(step.componentRef.instance);
+        let result = stepSpecificValidateMethod();
+
+        if (isObservable<boolean>(result)) {
+          return result;
+        }
+        else if (typeof result === typeof true) {
+          return <boolean>result;
+        }
+      }
+    }
+
+    return true;
+  }
 }
 
 export interface StepDefinition {
