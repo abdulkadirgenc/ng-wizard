@@ -162,17 +162,29 @@ export class AppComponent implements OnInit {
 ```
 
 ## Configuration
-#### `NgWizardStep` parameters:
+### `NgWizardStep` parameters:
+#### Input parameters:
 
 | Name        | Type                                                                                                      | Default Value       | Description                                                                  |
 | ----------- | --------------------------------------------------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------- |
 | title       | `string`                                                                                                  |                     | Step title                                                                   |
 | description | `string`                                                                                                  |                     | Step description                                                             |
 | state       | `STEP_STATE`                                                                                              | `STEP_STATE.normal` | Step State (normal, disabled, error, hidden)                                 |
+| component   | `Component`                                                                                               |                     | A component can be defined for step content.                                 |
 | canExit     | `boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>)` |                     | Validation for transition from step                                          |
 | canEnter    | `boolean | ((args: StepValidationArgs) => boolean) | ((args: StepValidationArgs) => Observable<boolean>)` |                     | Validation for transition to step                                            |
 
-#### `NgWizardConfig` properties:
+#### Output parameters:
+
+| Name          | Type           | Default Value | Description                                                                                     |
+| ------------  | -------------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| index         | `number`       |               | Step Index                                                                                      |
+| status        | `STEP_STATUS`  |               | Step Status (untouched, done, active)                                                           |
+| initialStatus | `STEP_STATUS`  |               | Initial Step Status (untouched, done, active)                                                   |
+| initialState  | `STEP_STATE`   |               | Step State (normal, disabled, error, hidden)                                                    |
+| componentRef  | `ComponentRef` |               | If the component input parameter is given, it is used to access the instance of this component. |
+
+### `NgWizardConfig` properties:
 
 | Name            | Type                                 | Default Value                                                                                                                                                                 | Description                                                                  |
 | --------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -184,7 +196,7 @@ export class AppComponent implements OnInit {
 | anchorSettings  | `AnchorSettings`                     | `{ anchorClickable: true, enableAllAnchors: false, markDoneStep: true, markAllPreviousStepsAsDone: true, removeDoneStepOnNavigateBack: false, enableAnchorOnDoneStep: true }` | Anchor settings                                                              |
 | theme           | `THEME`                              | `THEME.default`                                                                                                                                                               | Wizard theme (default, arrows, circles, dots)                                |
 
-#### `ToolbarSettings` properties:
+### `ToolbarSettings` properties:
 
 | Name                  | Type                      | Default Value                 | Description                                                       |
 | --------------------- | ------------------------- | ----------------------------- | ----------------------------------------------------------------- |
@@ -194,7 +206,7 @@ export class AppComponent implements OnInit {
 | showPreviousButton    | `boolean`                 | `true`                        | show/hide Previous button                                         |
 | toolbarExtraButtons   | `ToolbarButton[]`         | `[]`                          | Extra buttons to show on toolbar, array of input/buttons elements |
 
-#### `AnchorSettings` properties:
+### `AnchorSettings` properties:
 
 | Name                         | Type        | Default Value | Description                                                     |
 | ---------------------------- | ----------- | ------------- | --------------------------------------------------------------- |
