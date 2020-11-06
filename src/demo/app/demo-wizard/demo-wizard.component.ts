@@ -54,6 +54,7 @@ export class DemoWizardComponent implements OnInit {
   }
 
   stepChanged(args: StepChangedArgs) {
+    this.selectedStepIndex = args.step.index;
     console.log('catching step change - method 1');
   }
 
