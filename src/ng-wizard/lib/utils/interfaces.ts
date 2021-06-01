@@ -1,5 +1,5 @@
 import { TOOLBAR_POSITION, TOOLBAR_BUTTON_POSITION,/* TRANSITION_EFFECT,*/ THEME, STEP_STATE, STEP_STATUS, STEP_DIRECTIN, STEP_POSITION } from './enums';
-import { Input, HostBinding, Directive, Type, ComponentRef } from '@angular/core';
+import { Input, HostBinding, Type, ComponentRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Language {
@@ -40,7 +40,6 @@ export interface NgWizardConfig {
     theme?: THEME; // theme for the wizard, related css need to include for other than default theme
 }
 
-@Directive()
 export abstract class NgWizardStep {
     index: number;
 
