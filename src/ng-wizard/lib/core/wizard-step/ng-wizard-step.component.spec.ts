@@ -8,8 +8,9 @@ describe('NgWizardStepComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NgWizardStepComponent ]
-    })
+    declarations: [NgWizardStepComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

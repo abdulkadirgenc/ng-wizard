@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { NgWizardService } from './ng-wizard.service';
 
 describe('NgWizardService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => TestBed.configureTestingModule({ teardown: { destroyAfterEach: false } }));
 
   it('should be created', () => {
     const service: NgWizardService = TestBed.get(NgWizardService);

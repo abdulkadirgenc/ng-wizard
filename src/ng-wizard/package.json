@@ -17,6 +17,9 @@
     "@angular/common": "^8.2.5",
     "@angular/core": "^8.2.5"
   },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "keywords": [
     "angular",
     "wizard",
