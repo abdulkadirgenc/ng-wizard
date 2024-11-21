@@ -1,0 +1,98 @@
+<div id="ngwizard" [ngClass]="styles.main">
+  <ul class="nav nav-tabs step-anchor">
+    <li
+      *ngFor="let step of steps; let i = index"
+      [ngClass]="_getStepCssClass(step)"
+    >
+      <a
+        href="#step-{{ i }}"
+        (click)="_showSelectedStep($event, step)"
+        *ngIf="!step.isHidden"
+        class="nav-link"
+        >{{ step.title }}<br /><small>{{ step.description }}</small></a
+      >
+    </li>
+  </ul>
+
+  <div *ngIf="showToolbarTop" [ngClass]="styles.toolbarTop">
+    <div class="btn-group mr-2 ng-wizard-btn-group" role="group">
+      <button
+        *ngIf="showPreviousButton"
+        [ngClass]="styles.previousButton"
+        type="button"
+        (click)="_showPreviousStep($event)"
+      >
+        {{ config!.lang!.previous }}
+      </button>
+      <button
+        *ngIf="showNextButton"
+        [ngClass]="styles.nextButton"
+        type="button"
+        (click)="_showNextStep($event)"
+      >
+        {{ config!.lang!.next }}
+      </button>
+    </div>
+
+    <div
+      *ngIf="showExtraButtons"
+      class="btn-group mr-2 ng-wizard-btn-group-extra"
+      role="group"
+    >
+      <button
+        *ngFor="
+          let button of config!.toolbarSettings!.toolbarExtraButtons;
+          let j = index
+        "
+        [ngClass]="button.class"
+        type="button"
+        (click)="_extraButtonClicked(button)"
+      >
+        {{ button.text }}
+      </button>
+    </div>
+  </div>
+
+  <div class="ng-wizard-container tab-content">
+    <ng-content></ng-content>
+  </div>
+
+  <div *ngIf="showToolbarBottom" [ngClass]="styles.toolbarBottom">
+    <div class="btn-group mr-2 ng-wizard-btn-group" role="group">
+      <button
+        *ngIf="showPreviousButton"
+        [ngClass]="styles.previousButton"
+        type="button"
+        (click)="_showPreviousStep($event)"
+      >
+        {{ config!.lang!.previous }}
+      </button>
+      <button
+        *ngIf="showNextButton"
+        [ngClass]="styles.nextButton"
+        type="button"
+        (click)="_showNextStep($event)"
+      >
+        {{ config!.lang!.next }}
+      </button>
+    </div>
+
+    <div
+      *ngIf="showExtraButtons"
+      class="btn-group mr-2 ng-wizard-btn-group-extra"
+      role="group"
+    >
+      <button
+        *ngFor="
+          let button of config!.toolbarSettings!.toolbarExtraButtons;
+          let j = index
+        "
+        [ngClass]="button.class"
+        type="button"
+        (click)="_extraButtonClicked(button)"
+      >
+        {{ button.text }}
+      </button>
+    </div>
+  </div>
+</div>
