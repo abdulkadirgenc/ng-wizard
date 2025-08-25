@@ -8,7 +8,13 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { Subscription, of, Observable, isObservable } from 'rxjs';
+import {
+  Subscription,
+  of,
+  Observable,
+  isObservable,
+  firstValueFrom,
+} from 'rxjs';
 import { NgWizardDataService } from '../../services/ng-wizard-data.service';
 import {
   THEME,
@@ -323,7 +329,7 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
     }
   }
 
-  _showStep(selectedStepIndex: number) {
+  async _showStep(selectedStepIndex: number) {
     // If step not found, skip
     if (selectedStepIndex >= this.steps.length || selectedStepIndex < 0) {
       return;
@@ -346,28 +352,27 @@ export class NgWizardComponent implements OnDestroy, AfterContentInit {
 
     this._showLoader();
 
-    this._isStepChangeValid(
-      selectedStep,
-      this.currentStep && this.currentStep.canExit
-    )
-      .toPromise()
-      .then((isValid) => {
-        if (isValid) {
-          return this._isStepChangeValid(
-            selectedStep,
-            selectedStep.canEnter
-          ).toPromise();
-        }
+    try {
+      let isValid = await firstValueFrom(
+        this._isStepChangeValid(
+          selectedStep,
+          this.currentStep && this.currentStep.canExit
+        )
+      );
 
-        return of(isValid).toPromise();
-      })
-      .then((isValid) => {
-        if (isValid) {
-          // Load step content
-          this._loadStepContent(selectedStep);
-        }
-      })
-      .finally(() => this._hideLoader());
+      if (isValid) {
+        isValid = await firstValueFrom(
+          this._isStepChangeValid(selectedStep, selectedStep.canEnter)
+        );
+      }
+
+      if (isValid) {
+        // Load step content
+        this._loadStepContent(selectedStep);
+      }
+    } finally {
+      this._hideLoader();
+    }
   }
 
   private _isStepChangeValid(

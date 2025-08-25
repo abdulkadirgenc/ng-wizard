@@ -50,16 +50,11 @@ export class DemoWizardComponent implements OnInit {
     this.selectedTheme = this.config.theme;
     this.selectedStepIndex = this.config.selected;
 
-    this.ngWizardService.stepChanged().subscribe({
-      next: (args) => {
-        console.log('catching step change - method 2');
-      },
-    });
+    this.ngWizardService.stepChanged().subscribe();
   }
 
   stepChanged(args: StepChangedArgs) {
     this.selectedStepIndex = args.step.index;
-    console.log('catching step change - method 1');
   }
 
   showPreviousStep(event?: Event) {

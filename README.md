@@ -1,4 +1,5 @@
 # ng-wizard
+
 ng-wizard is a stepper / wizard component that you can use in your Angular applications. You can access the sample demo project **[by clicking here](https://ng-wizard.stackblitz.io)**.
 
 ## Screenshots
@@ -12,21 +13,25 @@ ng-wizard is a stepper / wizard component that you can use in your Angular appli
 ![Dots](/Screenshots/4_dots.png)
 
 ## Dependencies
-+ [Bootstrap 4](https://getbootstrap.com/docs/4.3/getting-started/download/)
 
+- [Bootstrap 5](getbootstrap.com/docs/5.3/getting-started/introduction/)
 
 ## Getting started
+
 Install **ng-wizard** through npm:
+
 ```
 $ npm install --save ng-wizard
 ```
 
 Include **bootstrap** CSS file (skip if already imported):
+
 ```css
 @import '~bootstrap/dist/css/bootstrap.min.css';
 ```
 
 Include **ng-wizard** CSS files:
+
 ```css
 /* Mandatory */
 @import '~ng-wizard/themes/ng_wizard.min.css';
@@ -39,29 +44,27 @@ Include **ng-wizard** CSS files:
 ```
 
 Import the **ng-wizard module** into your apps module:
+
 ```typescript
 import { NgModule } from '@angular/core';
 
 import { NgWizardModule, NgWizardConfig, THEME } from 'ng-wizard';
 
 const ngWizardConfig: NgWizardConfig = {
-  theme: THEME.default
+  theme: THEME.default,
 };
 
 @NgModule({
-  imports: [
-    NgWizardModule.forRoot(ngWizardConfig)
-  ]
+  imports: [NgWizardModule.forRoot(ngWizardConfig)],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 Add an **ng-wizard** component to the html template of your component:
+
 ```html
 <ng-wizard [config]="config" (stepChanged)="stepChanged($event)">
-
-  <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'"
-    [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+  <ng-wizard-step [title]="'Step 1'" [description]="'Step 1 description'" [canEnter]="isValidTypeBoolean" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
     <span>Step 1 content</span>
   </ng-wizard-step>
 
@@ -69,12 +72,11 @@ Add an **ng-wizard** component to the html template of your component:
     <span>Step 2 content</span>
   </ng-wizard-step>
 
-  <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'"
-    [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
+  <ng-wizard-step [title]="'Step 3'" [description]="'Step 3 description'" [canEnter]="isValidFunctionReturnsObservable.bind(this)" [canExit]="isValidFunctionReturnsBoolean.bind(this)">
     <span>Step 3 content</span>
   </ng-wizard-step>
 
-<ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
+  <ng-wizard-step [title]="'Step 4'" [description]="'Step 4 description'">
     <span>Step 4 content</span>
   </ng-wizard-step>
 
@@ -92,24 +94,24 @@ Add an **ng-wizard** component to the html template of your component:
 </ng-wizard>
 ```
 
-
 `[config]` is an optional parameter for **ng-wizard** component.
 
 If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file.
+
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { of } from 'rxjs';
 import { NgWizardConfig, NgWizardService, StepChangedArgs, StepValidationArgs, STEP_STATE, THEME } from 'ng-wizard';
 
 @Component({
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
 })
 export class AppComponent implements OnInit {
   stepStates = {
     normal: STEP_STATE.normal,
     disabled: STEP_STATE.disabled,
     error: STEP_STATE.error,
-    hidden: STEP_STATE.hidden
+    hidden: STEP_STATE.hidden,
   };
 
   config: NgWizardConfig = {
@@ -117,16 +119,20 @@ export class AppComponent implements OnInit {
     theme: THEME.arrows,
     toolbarSettings: {
       toolbarExtraButtons: [
-        { text: 'Finish', class: 'btn btn-info', event: () => { alert("Finished!!!"); } }
+        {
+          text: 'Finish',
+          class: 'btn btn-info',
+          event: () => {
+            alert('Finished!!!');
+          },
+        },
       ],
-    }
+    },
   };
 
-  constructor(private ngWizardService: NgWizardService) {
-  }
+  constructor(private ngWizardService: NgWizardService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   showPreviousStep(event?: Event) {
     this.ngWizardService.previous();
@@ -158,11 +164,12 @@ export class AppComponent implements OnInit {
     return of(true);
   }
 }
-
 ```
 
 ## Configuration
+
 ### `NgWizardStep` parameters:
+
 #### Input parameters:
 
 | Name        | Type                                                                        | Default Value       | Description                                  |
@@ -218,7 +225,9 @@ export class AppComponent implements OnInit {
 | enableAnchorOnDoneStep       | `boolean[]` | `true`        | Enable/Disable the done steps navigation                        |
 
 ## Thanks
+
 This component was created by rewriting the [jQuery Smart Wizard 4](https://github.com/techlab/SmartWizard) in Angular. Thanks to [TechLaboratory](http://www.techlaboratory.net/) for **.Css** files.
 
 ## License
+
 [MIT License](https://github.com/abdulkadirgenc/ng-wizard/blob/master/LICENSE)

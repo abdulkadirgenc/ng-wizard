@@ -14,7 +14,7 @@ ng-wizard is a stepper / wizard component that you can use in your Angular appli
 
 ## Dependencies
 
-- [Bootstrap 4](https://getbootstrap.com/docs/4.3/getting-started/download/)
+- [Bootstrap 5](getbootstrap.com/docs/5.3/getting-started/introduction/)
 
 ## Getting started
 
@@ -27,28 +27,28 @@ $ npm install --save ng-wizard
 Include **bootstrap** CSS file (skip if already imported):
 
 ```css
-@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~bootstrap/dist/css/bootstrap.min.css';
 ```
 
 Include **ng-wizard** CSS files:
 
 ```css
 /* Mandatory */
-@import "~ng-wizard/themes/ng_wizard.min.css";
+@import '~ng-wizard/themes/ng_wizard.min.css';
 
 /* Optional */
 /* If a theme other than default is used, the css file for that theme is required. */
-@import "~ng-wizard/themes/ng_wizard_theme_arrows.min.css";
-@import "~ng-wizard/themes/ng_wizard_theme_circles.min.css";
-@import "~ng-wizard/themes/ng_wizard_theme_dots.min.css";
+@import '~ng-wizard/themes/ng_wizard_theme_arrows.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_circles.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_dots.min.css';
 ```
 
 Import the **ng-wizard module** into your apps module:
 
 ```typescript
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 
-import { NgWizardModule, NgWizardConfig, THEME } from "ng-wizard";
+import { NgWizardModule, NgWizardConfig, THEME } from 'ng-wizard';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.default,
@@ -99,12 +99,12 @@ Add an **ng-wizard** component to the html template of your component:
 If you want to override **ng-wizard** default configuration defined in **apps module** for a specific component, define `[config]` parameter in your **\*\*\*.component.ts** file.
 
 ```typescript
-import { Component, OnInit } from "@angular/core";
-import { of } from "rxjs";
-import { NgWizardConfig, NgWizardService, StepChangedArgs, StepValidationArgs, STEP_STATE, THEME } from "ng-wizard";
+import { Component, OnInit } from '@angular/core';
+import { of } from 'rxjs';
+import { NgWizardConfig, NgWizardService, StepChangedArgs, StepValidationArgs, STEP_STATE, THEME } from 'ng-wizard';
 
 @Component({
-  templateUrl: "app.component.html",
+  templateUrl: 'app.component.html',
 })
 export class AppComponent implements OnInit {
   stepStates = {
@@ -120,10 +120,10 @@ export class AppComponent implements OnInit {
     toolbarSettings: {
       toolbarExtraButtons: [
         {
-          text: "Finish",
-          class: "btn btn-info",
+          text: 'Finish',
+          class: 'btn btn-info',
           event: () => {
-            alert("Finished!!!");
+            alert('Finished!!!');
           },
         },
       ],

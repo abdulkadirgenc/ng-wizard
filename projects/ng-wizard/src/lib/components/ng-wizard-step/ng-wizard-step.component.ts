@@ -1,10 +1,4 @@
-import {
-  Component,
-  forwardRef,
-  OnInit,
-  ViewChild,
-  ComponentFactoryResolver,
-} from '@angular/core';
+import { Component, forwardRef, OnInit, ViewChild } from '@angular/core';
 import { NgWizardStepContentDirective } from '../../directives/ng-wizard-step-content.directive';
 import { STEP_STATE } from '../../utils/enums';
 import { NgWizardStep } from '../../utils/interfaces';
@@ -24,7 +18,7 @@ export class NgWizardStepComponent extends NgWizardStep implements OnInit {
   @ViewChild(NgWizardStepContentDirective, { static: true })
   stepContent: NgWizardStepContentDirective;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  constructor() {
     super();
   }
 
@@ -37,12 +31,10 @@ export class NgWizardStepComponent extends NgWizardStep implements OnInit {
       return;
     }
 
-    let componentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(this.component);
-
     this.stepContent.viewContainerRef.clear();
-    this.componentRef =
-      this.stepContent.viewContainerRef.createComponent(componentFactory);
+    this.componentRef = this.stepContent.viewContainerRef.createComponent(
+      this.component
+    );
   }
 
   get isHidden(): boolean {
