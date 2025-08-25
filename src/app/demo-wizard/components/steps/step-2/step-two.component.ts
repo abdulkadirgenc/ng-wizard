@@ -4,5 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-step-two',
   templateUrl: './step-two.component.html',
   styleUrls: ['./step-two.component.scss'],
+  standalone: false,
 })
 export class StepTwoComponent {}

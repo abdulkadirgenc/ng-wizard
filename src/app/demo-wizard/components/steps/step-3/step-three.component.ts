@@ -5,6 +5,7 @@ import { of } from 'rxjs';
   selector: 'app-step-three',
   templateUrl: './step-three.component.html',
   styleUrls: ['./step-three.component.scss'],
+  standalone: false,
 })
 export class StepThreeComponent {
   validateEntryToStep = true;

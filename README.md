@@ -2,6 +2,8 @@
 
 ng-wizard is a stepper / wizard component that you can use in your Angular applications. You can access the sample demo project **[by clicking here](https://ng-wizard.stackblitz.io)**.
 
+> Compatibility: This version of `ng-wizard` is compatible with Angular 19 and later versions. Ensure your project uses Angular >= 19.0.0.
+
 ## Screenshots
 
 ![Default](/Screenshots/1_default.png)

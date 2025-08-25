@@ -15,6 +15,7 @@ import {
   selector: 'app-demo-wizard',
   templateUrl: './demo-wizard.component.html',
   styleUrls: ['./demo-wizard.component.scss'],
+  standalone: false,
 })
 export class DemoWizardComponent implements OnInit {
   config: NgWizardConfig;

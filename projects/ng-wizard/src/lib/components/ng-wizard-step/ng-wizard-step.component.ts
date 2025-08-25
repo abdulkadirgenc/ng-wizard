@@ -13,6 +13,7 @@ import { NgWizardStep } from '../../utils/interfaces';
       useExisting: forwardRef(() => NgWizardStepComponent),
     },
   ],
+  standalone: false,
 })
 export class NgWizardStepComponent extends NgWizardStep implements OnInit {
   @ViewChild(NgWizardStepContentDirective, { static: true })
